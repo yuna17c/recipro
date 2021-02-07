@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { TextInput, Image, ImageBackground, StyleSheet, Platform, StatusBar, View, } from 'react-native';
 import BatchedBridge from 'react-native/Libraries/BatchedBridge/BatchedBridge';
 import colors from '../config/colors';
+import 'react-native-gesture-handler';
 TextInput.defaultProps.selectionColor = 'rgba(254, 182, 0, 0.5)';
 
-function Login(props) {
+function Login({navigation}) {
     
     const handleKeyPress = e => {
         console.log(userValue)
         console.log(passValue)
+        navigation.navigate('Dashboard')
     };
 
     const [userValue, onUserChangeText] = React.useState('')
