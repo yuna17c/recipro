@@ -3,8 +3,9 @@ import React from 'react';
 import { View } from "react-native";
 import Dashboard from './app/screens/Dashboard';
 import HomeScreen from './app/screens/HomeScreen';
-import { StackNavigator } from 'react-navigation';
-import 'react-native-gesture-handler';
+import Login from './app/screens/Login';
+//import { StackNavigator } from 'react-navigation';
+//import 'react-native-gesture-handler';
 
 // const App = () => {
 //   <NavigationContainer>
@@ -14,6 +15,7 @@ import 'react-native-gesture-handler';
 // };
 
 export default function App() {
-  return <HomeScreen />;
+  //return <HomeScreen />;
   //return <Dashboard />;
+  return <Login/>
 }
