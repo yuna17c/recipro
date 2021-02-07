@@ -26,7 +26,7 @@ function Login(props) {
         </Image>
         <Image 
             source = {require('../assets/sign_in_text.png')}
-            style = {styles.welcomeImage}>
+            style = {styles.signInImage}>
         </Image>
 
         <TextInput
@@ -66,6 +66,11 @@ const styles = StyleSheet.create({
     welcomeImage: {
         top:30,
         marginTop:15,
+    },
+    signInImage: {
+        top:30,
+        marginTop:15,
+        right:30,
     },
     userTextInput: {
         height:50,
