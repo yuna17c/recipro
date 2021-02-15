@@ -1,19 +1,22 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
-import { TouchableOpacity, ImageBackground, StyleSheet, Image, Platform, StatusBar, View, Button } from 'react-native';
+
+import { TouchableOpacity, Image, ImageBackground, StyleSheet, Platform, StatusBar, View, Button } from 'react-native';
 
 function HomeScreen({ navigation }) {
     return (
         <ImageBackground
             style={styles.background}
-            source={require('../assets/homeBackground.png')}
-        >
-            <TouchableOpacity
-                onPress={() => navigation.navigate('Login')}
-                style={styles.homeButton}>
-                <Image source={require('../assets/homeButton.png')} />
+            source={require('../assets/homeBackground.png')}>
+            
+            <TouchableOpacity onPress={()=>navigation.navigate('Dashboard')}>
+                <Image source={require("../assets/up_arrow.png")}/>
             </TouchableOpacity>
-
+            
+            {/* <Button
+                title="Go to Details"
+                onPress={() => navigation.navigate('Dashboard')}
+            /> */}
         </ImageBackground>
     );
 }
