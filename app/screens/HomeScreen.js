@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
-import { TouchableOpacity, ImageBackground, StyleSheet, Platform, StatusBar, View, Button } from 'react-native';
+import { TouchableOpacity, ImageBackground, StyleSheet, Image, Platform, StatusBar, View, Button } from 'react-native';
 
 function HomeScreen({ navigation }) {
     return (
@@ -8,10 +8,12 @@ function HomeScreen({ navigation }) {
             style={styles.background}
             source={require('../assets/homeBackground.png')}
         >
-            <Button
-                title="Go to Details"
-                onPress={() => navigation.navigate('Dashboard')}
-            />
+            <TouchableOpacity
+                onPress={() => navigation.navigate('Login')}
+                style={styles.homeButton}>
+                <Image source={require('../assets/homeButton.png')} />
+            </TouchableOpacity>
+
         </ImageBackground>
     );
 }
@@ -21,10 +23,12 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     },
-    nextButton: {
-        width: '100%',
-        height: 70,
-        backgroundColor: "#fc5c65",
+    homeButton: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        marginBottom: 24,
+        alignItems: 'center',
+
     }
 })
 
