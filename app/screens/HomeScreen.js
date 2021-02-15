@@ -1,15 +1,21 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { TouchableOpacity, ImageBackground, StyleSheet, Image, Platform, StatusBar, View, Button } from 'react-native';
 =======
 import { TouchableOpacity, Image, ImageBackground, StyleSheet, Platform, StatusBar, View, Button } from 'react-native';
 >>>>>>> df963b220ee616e061a51a818fee8ebf2e1b07b3
+=======
+
+import { TouchableOpacity, Image, ImageBackground, StyleSheet, Platform, StatusBar, View, Button } from 'react-native';
+>>>>>>> 1acefe5fffd913ef1fbb0c326c2f0d492c3ce987
 
 function HomeScreen({ navigation }) {
     return (
         <ImageBackground
             style={styles.background}
+<<<<<<< HEAD
 <<<<<<< HEAD
             source={require('../assets/homeBackground.png')}
         >
@@ -20,6 +26,8 @@ function HomeScreen({ navigation }) {
             </TouchableOpacity>
 
 =======
+=======
+>>>>>>> 1acefe5fffd913ef1fbb0c326c2f0d492c3ce987
             source={require('../assets/homeBackground.png')}>
             
             <TouchableOpacity onPress={()=>navigation.navigate('Dashboard')}>
@@ -30,7 +38,10 @@ function HomeScreen({ navigation }) {
                 title="Go to Details"
                 onPress={() => navigation.navigate('Dashboard')}
             /> */}
+<<<<<<< HEAD
 >>>>>>> df963b220ee616e061a51a818fee8ebf2e1b07b3
+=======
+>>>>>>> 1acefe5fffd913ef1fbb0c326c2f0d492c3ce987
         </ImageBackground>
     );
 }
