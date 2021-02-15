@@ -1,4 +1,3 @@
-
 import 'react-native-gesture-handler';
 import * as React from 'react';
 import { ImageBackground, StyleSheet, Platform, StatusBar, View, Button } from 'react-native';

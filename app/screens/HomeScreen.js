@@ -1,34 +1,34 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
-import { TouchableOpacity, Image, ImageBackground, StyleSheet, Platform, StatusBar, View, Button } from 'react-native';
+import { TouchableOpacity, ImageBackground, StyleSheet, Image, Platform, StatusBar, View, Button } from 'react-native';
 
 function HomeScreen({ navigation }) {
     return (
         <ImageBackground
             style={styles.background}
-            source={require('../assets/homeBackground.png')}>
-            
-            <TouchableOpacity onPress={()=>navigation.navigate('Dashboard')}>
-                <Image source={require("../assets/up_arrow.png")}/>
+            source={require('../assets/homeBackground.png')}
+        >
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <Image
+                    source={require("../assets/homeButton.png")}
+                    style={styles.homeButton}
+                />
             </TouchableOpacity>
-            
-            {/* <Button
-                title="Go to Details"
-                onPress={() => navigation.navigate('Dashboard')}
-            /> */}
         </ImageBackground>
     );
 }
 
 const styles = StyleSheet.create({
     background: {
+        width: '100%',
+        height: '100%',
         flex: 1,
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+        alignItems: 'center',
+        justifyContent: 'flex-end'
     },
-    nextButton: {
-        width: '100%',
-        height: 70,
-        backgroundColor: "#fc5c65",
+    homeButton: {
+        marginBottom: 35,
     }
 })
 

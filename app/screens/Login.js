@@ -5,8 +5,8 @@ import colors from '../config/colors';
 import 'react-native-gesture-handler';
 TextInput.defaultProps.selectionColor = 'rgba(254, 182, 0, 0.5)';
 
-function Login({navigation}) {
-    
+function Login({ navigation }) {
+
     const handleKeyPress = e => {
         console.log(userValue)
         console.log(passValue)
@@ -17,37 +17,37 @@ function Login({navigation}) {
     const [passValue, onPassChangeText] = React.useState('')
 
     return (
-    <View style = {styles.container}>
-        <Image 
-            source = {require('../assets/log_in.png')}
-            style = {styles.backImage}>
-        </Image>
-        <Image 
-            source = {require('../assets/welcome_text.png')}
-            style = {styles.welcomeImage}>
-        </Image>
-        <Image 
-            source = {require('../assets/sign_in_text.png')}
-            style = {styles.signInImage}>
-        </Image>
+        <View style={styles.container}>
+            <Image
+                source={require('../assets/log_in.png')}
+                style={styles.backImage}>
+            </Image>
+            <Image
+                source={require('../assets/welcome_text.png')}
+                style={styles.welcomeImage}>
+            </Image>
+            <Image
+                source={require('../assets/sign_in_text.png')}
+                style={styles.signInImage}>
+            </Image>
 
-        <TextInput
-            value={userValue}
-            onChangeText={text => onUserChangeText(text)}
-            //onSubmitEditing={e => handleKeyPress(e)}
-            style = {styles.userTextInput}
-            placeholder = "Email">
-        </TextInput>
+            <TextInput
+                value={userValue}
+                onChangeText={text => onUserChangeText(text)}
+                //onSubmitEditing={e => handleKeyPress(e)}
+                style={styles.userTextInput}
+                placeholder="Email">
+            </TextInput>
 
-        <TextInput
-            value={passValue}
-            onChangeText={text=>onPassChangeText(text)}
-            onSubmitEditing={e=> handleKeyPress(e)}
-            style = {styles.userTextInput}
-            placeholder = "Password">
-        </TextInput>
+            <TextInput
+                value={passValue}
+                onChangeText={text => onPassChangeText(text)}
+                onSubmitEditing={e => handleKeyPress(e)}
+                style={styles.userTextInput}
+                placeholder="Password">
+            </TextInput>
 
-    </View>
+        </View>
 
     );
 }
@@ -65,24 +65,24 @@ const styles = StyleSheet.create({
         bottom: 0,
     },
     welcomeImage: {
-        top:30,
-        marginTop:15,
+        top: 30,
+        marginTop: 15,
     },
     signInImage: {
-        top:30,
-        marginTop:15,
-        right:30,
+        top: 30,
+        marginTop: 15,
+        right: 30,
     },
     userTextInput: {
-        height:50,
+        height: 50,
         top: 20,
-        borderWidth: 5,
+        borderWidth: 3.4,
         borderColor: colors.secondary,
         width: 225,
         paddingVertical: 8,
         paddingHorizontal: 15,
         marginTop: 35,
-        borderRadius:10,
+        borderRadius: 10,
         color: colors.coffee,
     }
 })
