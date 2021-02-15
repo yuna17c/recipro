@@ -7,6 +7,9 @@ import Login from './app/screens/Login';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import Message from './app/screens/Message';
+import Work from './app/screens/Work';
+import SendRequest from './app/screens/SendRequest';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +23,9 @@ function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Dashboard" component={Dashboard} />
+        <Stack.Screen name="SendRequest" component={SendRequest} />
+        <Stack.Screen name="Work" component={Work} />
+        <Stack.Screen name="Message" component={Message} />
       </Stack.Navigator>
     </NavigationContainer>
   );
