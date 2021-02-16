@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "573030585306",
+    "project_id": "recipro-95bca",
+    "storage_bucket": "recipro-95bca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:573030585306:android:7ce7aa3a40e94cdddce6e3",
+        "android_client_info": {
+          "package_name": "com.recipro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "573030585306-o6fofdk5mipbgn1a18dj3qm7a51cj69p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKlbUt-wD4JRhrp5oFoI5_4tFfmEJivGs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "573030585306-o6fofdk5mipbgn1a18dj3qm7a51cj69p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
