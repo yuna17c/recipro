@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:573030585306:android:7ce7aa3a40e94cdddce6e3",
+        "mobilesdk_app_id": "1:573030585306:android:d189c1ea474fa281dce6e3",
         "android_client_info": {
-          "package_name": "com.recipro"
+          "package_name": "com.amity.recipro"
         }
       },
       "oauth_client": [
