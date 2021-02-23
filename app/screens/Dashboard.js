@@ -4,7 +4,9 @@ import { ImageBackground, TouchableOpacity, Text, contentContainerStyle, ScrollV
 import colors from '../config/colors';
 import { back } from 'react-native/Libraries/Animated/src/Easing';
 
-function Dashboard({ navigation }) {
+function Dashboard({ route, navigation }) {
+    const {userValue} = route.params;
+    console.log(userValue);
     return (
         <View style={styles.parentContainer}>
             <View style={styles.container}>

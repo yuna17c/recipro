@@ -1,16 +1,8 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
 import { TouchableOpacity, ImageBackground, StyleSheet, Image, Platform, StatusBar, View, Button } from 'react-native';
-//import firestore from '@react-native-firebase/firestore';
 import "firebase/firestore";
 import {firebase} from '../config/firebase';
-
-const user = firebase.firestore()
-  .collection('users')
-  .doc('username')
-  .onSnapshot(documentSnapshot => {
-      console.log(documentSnapshot.data());
-  });
 
 function HomeScreen({ navigation }) {
     return (
