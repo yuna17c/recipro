@@ -39,5 +39,9 @@
   },
   "private": true,
   "name": "recipro",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "description": "Simply place requests for errand services within the neighbourhood to connect with those willing to help!\r Recipro is a mobile application focused on the concept of reciprocity and enhancing the connectivity within communities to improve social capital through a platform highlighting opportunities for acts of kindness in neighbourhoods.",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC"
 }

@@ -21,13 +21,14 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./app/assets/favicon.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.amity.recipro"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
+      "favicon": "./app/assets/favicon.png"
+    },
+    "description": ""
   }
 }
