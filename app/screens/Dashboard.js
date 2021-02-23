@@ -3,8 +3,16 @@ import * as React from 'react';
 import { ImageBackground, TouchableOpacity, Text, contentContainerStyle, ScrollView, Image, StyleSheet, Platform, StatusBar, View, Button, LogBox } from 'react-native';
 import colors from '../config/colors';
 import { back } from 'react-native/Libraries/Animated/src/Easing';
+import "firebase/firestore";
+import * as firebase from 'firebase';
+import Login from './Login';
+import BottomBar from './BottomBar';
 
 function Dashboard({ navigation }) {
+    console.log("hello")
+    console.log(Login.userValue)
+
+
     return (
         <View style={styles.parentContainer}>
             <View style={styles.container}>
@@ -15,20 +23,12 @@ function Dashboard({ navigation }) {
                     </Image>
 
                     <Image
-                        source={require('../assets/portfolio.png')}
+                        source={require('../assets/portfolio_bg.png')}
                         style={styles.portfolioBox}>
                     </Image>
                     <Image
                         source={require('../assets/daniPic.png')}
                         style={styles.profilePic}>
-                    </Image>
-                    <Image
-                        source={require('../assets/daniName.png')}
-                        style={styles.profileName}>
-                    </Image>
-                    <Image
-                        source={require('../assets/daniBio.png')}
-                        style={styles.profileBio}>
                     </Image>
                     <Image
                         source={require('../assets/portfolio_details.png')}
@@ -39,10 +39,10 @@ function Dashboard({ navigation }) {
             <View style={styles.barContainer}>
                 <View style={styles.buttons}>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('SendRequest')}
-                        style={styles.sendButton}>
+                        onPress={() => navigation.navigate('Dashboard')}
+                        style={styles.workButton}>
                         <Image
-                            source={require("../assets/sendButton.png")}
+                            source={require("../assets/dashboardButton.png")}
                             style={styles.buttonItem}
                         />
                     </TouchableOpacity>
@@ -51,6 +51,14 @@ function Dashboard({ navigation }) {
                         style={styles.workButton}>
                         <Image
                             source={require("../assets/workButton.png")}
+                            style={styles.buttonItem}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('SendRequest')}
+                        style={styles.sendButton}>
+                        <Image
+                            source={require("../assets/sendButton.png")}
                             style={styles.buttonItem}
                         />
                     </TouchableOpacity>
@@ -67,6 +75,7 @@ function Dashboard({ navigation }) {
         </View>
 
     );
+
 }
 
 const styles = StyleSheet.create({
@@ -93,19 +102,15 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     portfolioBox: {
-        marginBottom: 30,
+        marginBottom: 50,
     },
     portfolioBox1: {
         bottom: 0,
     },
-    bottomBar: {
-        position: 'absolute',
-        marginBottom: 30,
-    },
     profilePic: {
         position: 'absolute',
         alignSelf: 'center',
-        marginTop: 96,
+        marginTop: 115,
     },
     profileName: {
         position: 'absolute',
@@ -122,7 +127,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.secondary,
     },
     buttons: {
-        width: '70%',
+        width: '95%',
         alignSelf: 'center',
         marginTop: 10,
         flexDirection: 'row',

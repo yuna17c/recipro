@@ -9,11 +9,7 @@
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-firebase/app": "^10.8.0",
-<<<<<<< HEAD
-    "@react-native-firebase/auth": "^10.8.0",
-=======
     "@react-native-firebase/firestore": "^10.8.0",
->>>>>>> 1f7a80fbf440d49dc70629ab523b9deb56172364
     "@react-navigation/native": "^5.9.2",
     "@react-navigation/stack": "^5.14.2",
     "expo": "~40.0.0",
@@ -43,5 +39,9 @@
   },
   "private": true,
   "name": "recipro",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "description": "Simply place requests for errand services within the neighbourhood to connect with those willing to help!\r Recipro is a mobile application focused on the concept of reciprocity and enhancing the connectivity within communities to improve social capital through a platform highlighting opportunities for acts of kindness in neighbourhoods.",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC"
 }
