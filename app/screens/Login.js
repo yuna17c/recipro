@@ -1,16 +1,39 @@
 import React, { Component } from 'react';
-import { TextInput, Image, ImageBackground, StyleSheet, Platform, StatusBar, View, } from 'react-native';
+import { TextInput, Image, ImageBackground, StyleSheet, Platform, StatusBar, View, Alert, LogBox} from 'react-native';
 import BatchedBridge from 'react-native/Libraries/BatchedBridge/BatchedBridge';
 import colors from '../config/colors';
 import 'react-native-gesture-handler';
 TextInput.defaultProps.selectionColor = 'rgba(254, 182, 0, 0.5)';
+import "firebase/firestore";
+import {firebase} from '../config/firebase';
+LogBox.ignoreLogs(['Setting a timer']);
 
 function Login({ navigation }) {
 
     const handleKeyPress = e => {
-        console.log(userValue)
-        console.log(passValue)
-        navigation.navigate('Dashboard')
+        let user = firebase.firestore()
+            .collection('users')
+            .doc(userValue)
+
+        user.get()
+            .then((docSnapshot)=> {
+                if (docSnapshot.exists) {
+                    let pass = docSnapshot.get("password");
+                    console.log(pass);
+                    if (pass==passValue) navigation.navigate('Dashboard', {userValue});
+                    else {
+                        Alert.alert(
+                            "Your password does not match our records!"
+                        );
+                    }
+                    
+                }
+                else {
+                    Alert.alert(
+                        "Your username does not match our records!"
+                    );
+                }
+            });
     };
 
     const [userValue, onUserChangeText] = React.useState('')
@@ -34,9 +57,8 @@ function Login({ navigation }) {
             <TextInput
                 value={userValue}
                 onChangeText={text => onUserChangeText(text)}
-                //onSubmitEditing={e => handleKeyPress(e)}
                 style={styles.userTextInput}
-                placeholder="Email">
+                placeholder="Phone">
             </TextInput>
 
             <TextInput

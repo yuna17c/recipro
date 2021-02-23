@@ -8,11 +8,9 @@ import * as firebase from 'firebase';
 import Login from './Login';
 import BottomBar from './BottomBar';
 
-function Dashboard({ navigation }) {
-    console.log("hello")
-    console.log(Login.userValue)
-
-
+function Dashboard({ route, navigation }) {
+    const { userValue } = route.params;
+    console.log(userValue);
     return (
         <View style={styles.parentContainer}>
             <View style={styles.container}>
@@ -75,7 +73,6 @@ function Dashboard({ navigation }) {
         </View>
 
     );
-
 }
 
 const styles = StyleSheet.create({
