@@ -10,10 +10,27 @@ import BottomBar from './BottomBar';
 
 function Dashboard({ route, navigation }) {
     const { userValue } = route.params;
-    console.log(userValue);
+    let user = firebase.firestore()
+        .collection('users')
+        .doc(userValue)
+    user.get()
+        .then((docSnapshot) => {
+            if (docSnapshot.exists) {
+                let bio = docSnapshot.get("bio");
+                let location = docSnapshot.get("location");
+                let name = docSnapshot.get("name");
+                let job = docSnapshot.get("occupation");
+                let pb = docSnapshot.get("personalBest");
+                let points = docSnapshot.get("points");
+                console.log(location);
+            }
+        });
     return (
         <View style={styles.parentContainer}>
             <View style={styles.container}>
+                <View>
+                    { }
+                </View>
                 <ScrollView >
                     <Image
                         source={require('../assets/logo.png')}
