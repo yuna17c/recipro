@@ -9,14 +9,19 @@ import Login from './Login';
 import BottomBar from './BottomBar';
 
 function Dashboard({ route, navigation }) {
+
+    const [bio, setBio] = React.useState('')
+
     const { userValue } = route.params;
     let user = firebase.firestore()
         .collection('users')
         .doc(userValue)
+    //var bio;
     user.get()
         .then((docSnapshot) => {
             if (docSnapshot.exists) {
-                let bio = docSnapshot.get("bio");
+                //var bio = docSnapshot.get("bio");
+                setBio(docSnapshot.get("bio"));
                 let location = docSnapshot.get("location");
                 let name = docSnapshot.get("name");
                 let job = docSnapshot.get("occupation");
@@ -36,6 +41,8 @@ function Dashboard({ route, navigation }) {
                         source={require('../assets/logo.png')}
                         style={styles.logoImage}>
                     </Image>
+
+                    <Text>here is bio: {bio}</Text>
 
                     <Image
                         source={require('../assets/portfolio_bg.png')}
