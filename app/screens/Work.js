@@ -3,6 +3,7 @@ import React, { useRef } from "react";
 import { Animated, ImageBackground, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Platform, StatusBar, View, Button, LogBox } from 'react-native';
 import colors from '../config/colors';
 import { render } from 'react-dom';
+import { color } from 'react-native-reanimated';
 
 function Work({ navigation }) {
     const fadeAnim1 = useRef(new Animated.Value(0)).current;
@@ -12,8 +13,9 @@ function Work({ navigation }) {
     const fadein1 = () => {
         // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(fadeAnim1, {
-            toValue: 1.5,
+            toValue: 1,
             duration: 90,
+            useNativeDriver: false,
         }).start();
     };
 
@@ -22,6 +24,7 @@ function Work({ navigation }) {
         Animated.timing(fadeAnim2, {
             toValue: 1.5,
             duration: 90,
+            useNativeDriver: false,
         }).start();
     };
 
@@ -30,6 +33,7 @@ function Work({ navigation }) {
         Animated.timing(fadeAnim3, {
             toValue: 1.5,
             duration: 90,
+            useNativeDriver: false,
         }).start();
     };
 
@@ -114,12 +118,27 @@ function Work({ navigation }) {
                             </TouchableOpacity>
 
                         </View>
+                        <View>
+                            <ImageBackground
+                                source={require('../assets/gardening.png')}
+                                style={styles.gardening}
+                            >
+                                <View style={styles.gardenTasks}>
+                                    <TouchableOpacity onPress={() => navigation.navigate('Gardening')}>
+                                        <Image source={require('../assets/garden1.png')}
+                                            style={{ flex: 1, marginRight: 5, borderRadius: 13 }}>
 
-                        <Image
-                            source={require('../assets/gardening.png')}
-                            style={styles.gardening}
-                        >
-                        </Image>
+                                        </Image>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity>
+                                        <Image source={require('../assets/garden2.png')}
+                                            style={{ flex: 1, marginLeft: 5, borderRadius: 13 }}>
+
+                                        </Image>
+                                    </TouchableOpacity>
+                                </View>
+                            </ImageBackground>
+                        </View>
                         <Image
                             source={require('../assets/plumbing.png')}
                             style={styles.plumbing}
@@ -138,7 +157,7 @@ function Work({ navigation }) {
 const styles = StyleSheet.create({
     parentContainer: {
         flex: 1,
-
+        width: '100%'
     },
     fadingContainer: {
         backgroundColor: colors.secondary,
@@ -147,6 +166,15 @@ const styles = StyleSheet.create({
         borderRadius: 9,
         width: '92%',
         alignSelf: 'center'
+    },
+    gardenTasks: {
+        flexDirection: 'row',
+        alignSelf: 'center',
+        alignContent: 'center',
+        width: '83%',
+        marginTop: 182,
+        paddingBottom: 39,
+        marginLeft: 8,
     },
     container: {
         flex: 1,
@@ -193,6 +221,9 @@ const styles = StyleSheet.create({
         marginBottom: 50,
     },
     gardening: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
         alignSelf: 'center',
         marginTop: 30,
     },

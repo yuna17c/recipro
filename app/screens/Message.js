@@ -13,15 +13,8 @@ const Message = () => {
         // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(fadeAnim, {
             toValue: 1,
-            duration: 5000
-        }).start();
-    };
-
-    const fadeOut = () => {
-        // Will change fadeAnim value to 0 in 5 seconds
-        Animated.timing(fadeAnim, {
-            toValue: 0,
-            duration: 5000
+            duration: 5000,
+            useNativeDriver: true,
         }).start();
     };
 
@@ -37,7 +30,6 @@ const Message = () => {
             </Animated.View>
             <View style={styles.buttonRow}>
                 <Button title="Fade In" onPress={fadeIn} />
-                <Button title="Fade Out" onPress={fadeOut} />
             </View>
         </View>
     );
