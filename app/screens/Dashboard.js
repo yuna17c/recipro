@@ -6,7 +6,6 @@ import { back } from 'react-native/Libraries/Animated/src/Easing';
 import "firebase/firestore";
 import * as firebase from 'firebase';
 import Login from './Login';
-import BottomBar from './BottomBar';
 
 function Dashboard({ route, navigation }) {
 
