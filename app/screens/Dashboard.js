@@ -5,7 +5,8 @@ import colors from '../config/colors';
 import { back } from 'react-native/Libraries/Animated/src/Easing';
 import "firebase/firestore";
 import * as firebase from 'firebase';
-import Login from './Login';
+import BottomBar from './BottomBar';
+
 
 function Dashboard({ route, navigation }) {
 
@@ -76,7 +77,7 @@ function Dashboard({ route, navigation }) {
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('SendRequest')}
+                        onPress={() => navigation.navigate('SendRequest',{userValue})}
                         style={styles.sendButton}>
                         <Image
                             source={require("../assets/sendButton.png")}
@@ -84,7 +85,7 @@ function Dashboard({ route, navigation }) {
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('Message')}
+                        onPress={() => navigation.navigate('Message',{userValue})}
                         style={styles.chatButton}>
                         <Image
                             source={require("../assets/chatButton.png")}
