@@ -6,11 +6,17 @@ import { back } from 'react-native/Libraries/Animated/src/Easing';
 import "firebase/firestore";
 import * as firebase from 'firebase';
 import Login from './Login';
+import { color } from 'react-native-reanimated';
 
 function Dashboard({ route, navigation }) {
 
     const [bio, setBio] = React.useState('')
-
+    const [name, setName] = React.useState('')
+    const [location, setLocation] = React.useState('')
+    const [job, setJob] = React.useState('')
+    const [skill, setSkill] = React.useState('')
+    const [pb, setPb] = React.useState('')
+    const [points, setPoints] = React.useState('')
     const { userValue } = route.params;
     let user = firebase.firestore()
         .collection('users')
@@ -21,12 +27,13 @@ function Dashboard({ route, navigation }) {
             if (docSnapshot.exists) {
                 //var bio = docSnapshot.get("bio");
                 setBio(docSnapshot.get("bio"));
-                let location = docSnapshot.get("location");
-                let name = docSnapshot.get("name");
-                let job = docSnapshot.get("occupation");
-                let pb = docSnapshot.get("personalBest");
-                let points = docSnapshot.get("points");
-                console.log(location);
+                setLocation(docSnapshot.get("location"));
+                setName(docSnapshot.get("name"));
+                setJob(docSnapshot.get("occupation"));
+
+                setSkill(docSnapshot.get("skills"));
+                setPb(docSnapshot.get("personalBest"));
+                setPoints(docSnapshot.get("points"));
             }
         });
     return (
@@ -41,16 +48,28 @@ function Dashboard({ route, navigation }) {
                         style={styles.logoImage}>
                     </Image>
 
-                    <Text>here is bio: {bio}</Text>
-
-                    <Image
-                        source={require('../assets/portfolio_bg.png')}
-                        style={styles.portfolioBox}>
-                    </Image>
-                    <Image
-                        source={require('../assets/daniPic.png')}
-                        style={styles.profilePic}>
-                    </Image>
+                    <View style={styles.pfContainer1}>
+                        <Image
+                            source={require('../assets/portfolio_bg.png')}
+                            style={styles.pfBg}
+                        >
+                        </Image>
+                        <Image
+                            source={require('../assets/daniPic.png')}
+                            style={styles.profilePic}>
+                        </Image>
+                        <Text style={styles.name}>{name}</Text>
+                        <View style={styles.desc}>
+                            <Text style={{ fontSize: 15, position: 'absolute', marginTop: 240 }}>{job}</Text>
+                            <Text style={{ fontSize: 15, position: 'absolute', marginTop: 260 }}>{location}</Text>
+                        </View>
+                        <Text style={{ width: '70%', fontSize: 15, position: 'absolute', alignSelf: 'center', marginTop: 280 }}>{bio}</Text>
+                        <View style={styles.skillContainer}>
+                            <Text style={styles.item}>{skill[0]}</Text>
+                            <Text style={styles.item}>{skill[1]}</Text>
+                            <Text style={styles.item}>{skill[2]}</Text>
+                        </View>
+                    </View>
                     <Image
                         source={require('../assets/portfolio_details.png')}
                         style={styles.portfolioBox1}>
@@ -121,8 +140,36 @@ const styles = StyleSheet.create({
         marginTop: 20,
         alignSelf: 'center',
     },
-    portfolioBox: {
-        marginBottom: 50,
+    pfContainer1: {
+        marginTop: 5,
+        marginBottom: 35,
+        alignSelf: 'center',
+    },
+    pfBg: {
+        alignSelf: 'center',
+    },
+    skillContainer: {
+        flexDirection: 'row',
+        width: '80%',
+        position: 'absolute',
+        marginTop: 300,
+        alignSelf: 'center',
+    },
+    item: {
+        flex: 1,
+        borderRadius: 9,
+        paddingTop: 8,
+        paddingBottom: 8,
+        margin: 5,
+        marginTop: 30,
+        backgroundColor: colors.primary,
+        alignSelf: 'center',
+        textAlign: 'center',
+        color: 'white',
+    },
+    desc: {
+        alignContent: 'center',
+        marginLeft: 20,
     },
     portfolioBox1: {
         bottom: 0,
@@ -130,7 +177,7 @@ const styles = StyleSheet.create({
     profilePic: {
         position: 'absolute',
         alignSelf: 'center',
-        marginTop: 115,
+        marginTop: 25,
     },
     profileName: {
         position: 'absolute',
@@ -163,6 +210,14 @@ const styles = StyleSheet.create({
     },
     buttonItem: {
         alignSelf: 'center',
+    },
+    name: {
+        fontSize: 30,
+        position: 'absolute',
+        alignSelf: 'center',
+        marginTop: 200,
+        color: colors.primary,
+        fontWeight: 'bold',
     }
 })
 
