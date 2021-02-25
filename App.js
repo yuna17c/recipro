@@ -10,6 +10,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Message from './app/screens/Message';
 import Work from './app/screens/Work';
 import SendRequest from './app/screens/SendRequest';
+import Gardening from './app/screens/Gardening';
 
 const Stack = createStackNavigator();
 
@@ -26,6 +27,7 @@ function App() {
         <Stack.Screen name="SendRequest" component={SendRequest} />
         <Stack.Screen name="Work" component={Work} />
         <Stack.Screen name="Message" component={Message} />
+        <Stack.Screen name="Gardening" component={Gardening} />
       </Stack.Navigator>
     </NavigationContainer>
   );

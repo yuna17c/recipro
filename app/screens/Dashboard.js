@@ -7,6 +7,7 @@ import "firebase/firestore";
 import * as firebase from 'firebase';
 import BottomBar from './BottomBar';
 
+
 function Dashboard({ route, navigation }) {
 
     const [bio, setBio] = React.useState('')
