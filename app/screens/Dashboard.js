@@ -25,7 +25,9 @@ function Dashboard({ route, navigation }) {
         .then((docSnapshot) => {
             if (docSnapshot.exists) {
                 //var bio = docSnapshot.get("bio");
+
                 setName(docSnapshot.get("name"));
+
             }
         });
     return (
