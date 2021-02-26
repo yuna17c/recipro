@@ -104,7 +104,7 @@ function Dashboard({ route, navigation }) {
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('Message')}
+                        onPress={() => navigation.navigate('Message', {userValue})}
                         style={styles.chatButton}>
                         <Image
                             source={require("../assets/chatButton.png")}
