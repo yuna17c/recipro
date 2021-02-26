@@ -10,27 +10,32 @@ import { color } from 'react-native-reanimated';
 
 function Dashboard({ route, navigation }) {
 
-    //const [bio, setBio] = React.useState('')
+    const [bio, setBio] = React.useState('')
     const [name, setName] = React.useState('')
     const [location, setLocation] = React.useState('')
     const [job, setJob] = React.useState('')
-    // const [skill, setSkill] = React.useState('')
-    // const [pb, setPb] = React.useState('')
-    // const [points, setPoints] = React.useState('')
+    const [skill1, setSkill1] = React.useState('')
+    const [skill2, setSkill2] = React.useState('')
+    const [skill3, setSkill3] = React.useState('')
+    const [pb, setPb] = React.useState('')
+    const [points, setPoints] = React.useState('')
+    const [displayUser, setDisplayUser]= React.useState()
 
     const { userValue } = route.params;
+    //setDisplayUser(require("../assets/"+userValue.toString()+".png"));
     let user = firebase.firestore()
         .collection('users')
         .doc(userValue)
     user.get()
         .then((docSnapshot) => {
             if (docSnapshot.exists) {
-                //var bio = docSnapshot.get("bio");
-
+                setBio(docSnapshot.get("bio"));
                 setName(docSnapshot.get("name"));
-                setJob(docSnapshot.get("job"));
+                setJob(docSnapshot.get("occupation"));
                 setLocation(docSnapshot.get("location"));
-
+                setSkill1(docSnapshot.get("skill1"));
+                setSkill2(docSnapshot.get("skill2"));
+                setSkill3(docSnapshot.get("skill3"));
             }
         });
     return (
@@ -52,23 +57,21 @@ function Dashboard({ route, navigation }) {
                         >
                         </Image>
                         <Image
-                            source={require('../assets/daniPic.png')}
+                            source={userValue=="4161112222"? require("../assets/4161112222.png"): require("../assets/9053334444.png")}
                             style={styles.profilePic}>
                         </Image>
                         <Text style={styles.name}>{name}</Text>
 
 
-                        <Text style={{ fontSize: 15, position: 'absolute', marginTop: 240, right: 50, }}>{job}</Text>
-                        <Text style={{ fontSize: 15, position: 'absolute', marginTop: 260 }}>{location}</Text>
-                        <View style={styles.desc}>
-
-                        </View>
-                        {/* <Text style={{ width: '70%', fontSize: 15, position: 'absolute', alignSelf: 'center', marginTop: 280 }}>{bio}</Text>
+                        <Text style={{ color: colors.coffee, fontWeight: 'bold', fontSize: 15, position: 'absolute',alignSelf: 'center', marginTop:232 }}>{job}</Text>
+                        <Text style={{ color: colors.coffee, fontWeight: 'bold', fontSize: 15, position: 'absolute', marginTop: 253, alignSelf: 'center', }}>{location}</Text>
+                        <View style={styles.desc}></View>
+                        <Text style={{ width: '90%', color: colors.coffee, textAlign: 'center', fontSize: 15, position: 'absolute', alignSelf: 'center', marginTop: 280 }}>{bio}</Text>
                         <View style={styles.skillContainer}>
-                            <Text style={styles.item}>{skill[0]}</Text>
-                            <Text style={styles.item}>{skill[1]}</Text>
-                            <Text style={styles.item}>{skill[2]}</Text>
-                        </View>  */}
+                            <Text style={styles.item}>{skill1}</Text>
+                            <Text style={styles.item}>{skill2}</Text>
+                            <Text style={styles.item}>{skill3}</Text>
+                        </View>
 
                     </View>
                     <Image
@@ -91,7 +94,7 @@ function Dashboard({ route, navigation }) {
                         onPress={() => navigation.navigate('Work')}
                         style={styles.workButton}>
                         <Image
-                            source={require("../assets/workButton.png")}
+                            source={ require("../assets/workButton.png")}
                             style={styles.buttonItem}
                         />
                     </TouchableOpacity>
@@ -213,7 +216,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     name: {
-        fontSize: 30,
+        fontSize: 25,
         position: 'absolute',
         alignSelf: 'center',
         marginTop: 200,
