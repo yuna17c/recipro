@@ -17,6 +17,7 @@ function Dashboard({ route, navigation }) {
     // const [skill, setSkill] = React.useState('')
     // const [pb, setPb] = React.useState('')
     // const [points, setPoints] = React.useState('')
+
     const { userValue } = route.params;
     let user = firebase.firestore()
         .collection('users')
