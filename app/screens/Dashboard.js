@@ -10,30 +10,22 @@ import { color } from 'react-native-reanimated';
 
 function Dashboard({ route, navigation }) {
 
-    const [bio, setBio] = React.useState('')
+    //const [bio, setBio] = React.useState('')
     const [name, setName] = React.useState('')
-    const [location, setLocation] = React.useState('')
-    const [job, setJob] = React.useState('')
-    const [skill, setSkill] = React.useState('')
-    const [pb, setPb] = React.useState('')
-    const [points, setPoints] = React.useState('')
+    // const [location, setLocation] = React.useState('')
+    // const [job, setJob] = React.useState('')
+    // const [skill, setSkill] = React.useState('')
+    // const [pb, setPb] = React.useState('')
+    // const [points, setPoints] = React.useState('')
     const { userValue } = route.params;
     let user = firebase.firestore()
         .collection('users')
         .doc(userValue)
-    //var bio;
     user.get()
         .then((docSnapshot) => {
             if (docSnapshot.exists) {
                 //var bio = docSnapshot.get("bio");
-                setBio(docSnapshot.get("bio"));
-                setLocation(docSnapshot.get("location"));
                 setName(docSnapshot.get("name"));
-                setJob(docSnapshot.get("occupation"));
-
-                setSkill(docSnapshot.get("skills"));
-                setPb(docSnapshot.get("personalBest"));
-                setPoints(docSnapshot.get("points"));
             }
         });
     return (
@@ -59,7 +51,7 @@ function Dashboard({ route, navigation }) {
                             style={styles.profilePic}>
                         </Image>
                         <Text style={styles.name}>{name}</Text>
-                        <View style={styles.desc}>
+                        {/* <View style={styles.desc}>
                             <Text style={{ fontSize: 15, position: 'absolute', marginTop: 240 }}>{job}</Text>
                             <Text style={{ fontSize: 15, position: 'absolute', marginTop: 260 }}>{location}</Text>
                         </View>
@@ -68,7 +60,7 @@ function Dashboard({ route, navigation }) {
                             <Text style={styles.item}>{skill[0]}</Text>
                             <Text style={styles.item}>{skill[1]}</Text>
                             <Text style={styles.item}>{skill[2]}</Text>
-                        </View>
+                        </View> */}
                     </View>
                     <Image
                         source={require('../assets/portfolio_details.png')}
