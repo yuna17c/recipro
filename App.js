@@ -11,6 +11,7 @@ import Message from './app/screens/Message';
 import Work from './app/screens/Work';
 import SendRequest from './app/screens/SendRequest';
 import Gardening from './app/screens/Gardening';
+import practice from './app/screens/practice';
 
 const Stack = createStackNavigator();
 
@@ -26,7 +27,7 @@ function App() {
         <Stack.Screen name="Dashboard" component={Dashboard} />
         <Stack.Screen name="SendRequest" component={SendRequest} />
         <Stack.Screen name="Work" component={Work} />
-        <Stack.Screen name="Message" component={Message} />
+        <Stack.Screen name="Message" component={practice} />
         <Stack.Screen name="Gardening" component={Gardening} />
       </Stack.Navigator>
     </NavigationContainer>

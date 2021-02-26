@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
-import React, { useRef } from "react";
-import { TouchableOpacity, Animated, ImageBackground, Text, contentContainerStyle, ScrollView, Image, StyleSheet, Platform, StatusBar, View, Button, LogBox } from 'react-native';
+import React, { useRef, useState } from "react";
+import { Alert, Modal, TouchableOpacity, Animated, Pressable, Text, ImageBackground, ScrollView, Image, StyleSheet, View } from 'react-native';
 import colors from '../config/colors';
 import { TextInput } from 'react-native-gesture-handler';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -13,12 +13,18 @@ function SendRequest({ route, navigation }) {
     const [taskDuration, onSelectDuration] = React.useState(0)
     const [taskUrgency, onSelectUrgency] = React.useState('')
     const [taskCategory, onSelectCategory] = React.useState('')
-
+    //console.log(taskDuration.value)
+    //console.log(task_category)
+    const [modalVisible, setModalVisible] = useState(false);
+    var points = 0
+    var task_category = ''
     const fadeAnim1 = useRef(new Animated.Value(0)).current;
     const fadeAnim2 = useRef(new Animated.Value(0)).current;
     const fadeAnim3 = useRef(new Animated.Value(0)).current;
 
     const fadein1 = () => {
+        task_category = 'gardening'
+        //console.log(task_category)
         // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(fadeAnim1, {
             toValue: 2.3,
@@ -43,32 +49,71 @@ function SendRequest({ route, navigation }) {
         }).start();
     };
 
-    const handleKeyPress = e => {}
+    if (taskDuration.value == 1 || taskDuration.value == 2) {
+        points += 10
+    } else if (taskDuration.value == 3 || taskDuration.value == 4) {
+        points += 15
+    } else {
+        points += 20
+    }
+    console.log(points)
+    // console.log(task_category)
+    const handleKeyPress = e => { }
 
     return (
         <View style={styles.parentContainer}>
-            <View style={styles.barContainer}>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <ImageBackground style={styles.modalView} source={require('../assets/pop-up.png')}>
+                        <Text style={styles.minus}>-{points} Recipoints</Text>
+                        <Text style={styles.explain}>This request will cost you {points} points.{"\n"}Are you ready to post?</Text>
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={[styles.button, styles.buttonConfirm]}
+                                onPress={() => setModalVisible(!modalVisible)}
+                            >
+                                <Text style={styles.textStyle}>Confirm</Text>
+                            </Pressable>
+                            <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={() => setModalVisible(!modalVisible)}
+                            >
+                                <Text style={styles.textStyle}>Cancel</Text>
+                            </Pressable>
+                        </View>
+                    </ImageBackground>
+
+                </View>
+            </Modal>
+            <View style={[styles.barContainer, modalVisible ? { opacity: 0.7 } : '']}>
                 <Image
                     source={require("../assets/post.png")}
                     style={styles.SendRequestButton}
                 />
             </View>
-            <View style={styles.container}>
+            <View style={[styles.container, modalVisible ? { opacity: 0.7 } : '']}>
                 <ScrollView >
                     <Image
                         source={require('../assets/upload_image.png')}
                         style={styles.uploadImage}>
                     </Image>
                     <View style={styles.taskRequestContainer}>
-                        <TextInput 
-                            value = {taskTitle}
+                        <TextInput
+                            value={taskTitle}
                             style={styles.titleTextInput}
                             placeholder="Title"
                             onChangeText={text => onTitleChangeText(text)}
                             placeholderTextColor={colors.coffee}>
                         </TextInput>
-                        <TextInput 
-                            value = {taskDescription}
+                        <TextInput
+                            value={taskDescription}
                             style={styles.userTextInput}
                             placeholder="Description"
                             multiline={true}
@@ -80,23 +125,23 @@ function SendRequest({ route, navigation }) {
                         </Image>
                         <DropDownPicker
                             items={[
-                                {label: 'Oakville, ON', value: 'Oakville, ON'},
-                                {label: 'Hamilton, ON', value: 'Hamilton, ON'},
-                                {label: 'Burlington, ON', value: 'Burlington, ON'},
+                                { label: 'Oakville, ON', value: 'Oakville, ON' },
+                                { label: 'Hamilton, ON', value: 'Hamilton, ON' },
+                                { label: 'Burlington, ON', value: 'Burlington, ON' },
                             ]}
-                            value = {taskLocation}
+                            value={taskLocation}
                             onChangeItem={item => onSelectLocation(item)}
-                            style = {styles.DropDownPickerStyle}
-                            dropDownStyle={{backgroundColor: colors.cream}}
-                            itemStyle={{justifyContent: 'flex-start'}}
-                            placeholder = 'Select Task Location'
-                            selectedLabelStyle={{fontWeight: 'bold',color: colors.cream}}
-                            placeholderStyle={{fontWeight: 'bold', color: colors.cream}}
-                            labelStyle={{color: colors.coffee}}>
+                            style={styles.DropDownPickerStyle}
+                            dropDownStyle={{ backgroundColor: colors.cream }}
+                            itemStyle={{ justifyContent: 'flex-start' }}
+                            placeholder='Select Task Location'
+                            selectedLabelStyle={{ fontWeight: 'bold', color: colors.cream }}
+                            placeholderStyle={{ fontWeight: 'bold', color: colors.cream }}
+                            labelStyle={{ color: colors.coffee }}>
                         </DropDownPicker>
                         <Image
                             source={require('../assets/use_postal_code.png')}
-                            style={{marginTop: 10}}>
+                            style={{ marginTop: 10 }}>
                         </Image>
                         <Image
                             source={require('../assets/task_duration.png')}
@@ -104,21 +149,21 @@ function SendRequest({ route, navigation }) {
                         </Image>
                         <DropDownPicker
                             items={[
-                                {label: 'under 1 hour', value: 1},
-                                {label: '1-2 hours', value: 2},
-                                {label: '3-4 hours', value: 4},
-                                {label: '5-6 hours', value: 6},
-                                {label: '6+ hours', value: 7}
+                                { label: 'under 1 hour', value: 1 },
+                                { label: '1-2 hours', value: 2 },
+                                { label: '3-4 hours', value: 3 },
+                                { label: '5-6 hours', value: 4 },
+                                { label: '6+ hours', value: 5 }
                             ]}
-                            value = {taskDuration}
+                            value={taskDuration}
                             onChangeItem={item => onSelectDuration(item)}
-                            style = {styles.DropDownPickerStyle}
-                            dropDownStyle={{backgroundColor: colors.cream}}
-                            itemStyle={{justifyContent: 'flex-start'}}
-                            placeholder = 'Select Task Duration'
-                            selectedLabelStyle={{fontWeight: 'bold',color: colors.cream}}
-                            placeholderStyle={{fontWeight: 'bold', color: colors.cream}}
-                            labelStyle={{color: colors.coffee}}>
+                            style={styles.DropDownPickerStyle}
+                            dropDownStyle={{ backgroundColor: colors.cream }}
+                            itemStyle={{ justifyContent: 'flex-start' }}
+                            placeholder='Select Task Duration'
+                            selectedLabelStyle={{ fontWeight: 'bold', color: colors.cream }}
+                            placeholderStyle={{ fontWeight: 'bold', color: colors.cream }}
+                            labelStyle={{ color: colors.coffee }}>
                         </DropDownPicker>
                         <Image
                             source={require('../assets/task_urgency.png')}
@@ -126,21 +171,21 @@ function SendRequest({ route, navigation }) {
                         </Image>
                         <DropDownPicker
                             items={[
-                                {label: 'today', value: 'today'},
-                                {label: 'tomorrow', value: 'tomorrow'},
-                                {label: 'this week', value: 'this week'},
-                                {label: 'next week', value: 'next week'},
-                                {label: 'next month', value: 'next month'}
+                                { label: 'today', value: 'today' },
+                                { label: 'tomorrow', value: 'tomorrow' },
+                                { label: 'this week', value: 'this week' },
+                                { label: 'next week', value: 'next week' },
+                                { label: 'next month', value: 'next month' }
                             ]}
-                            value = {taskUrgency}
+                            value={taskUrgency}
                             onChangeItem={item => onSelectUrgency(item)}
-                            style = {styles.DropDownPickerStyle}
-                            dropDownStyle={{backgroundColor: colors.cream}}
-                            itemStyle={{justifyContent: 'flex-start'}}
-                            placeholder = 'Select Task Urgency'
-                            selectedLabelStyle={{fontWeight: 'bold',color: colors.cream}}
-                            placeholderStyle={{fontWeight: 'bold', color: colors.cream}}
-                            labelStyle={{color: colors.coffee}}>
+                            style={styles.DropDownPickerStyle}
+                            dropDownStyle={{ backgroundColor: colors.cream }}
+                            itemStyle={{ justifyContent: 'flex-start' }}
+                            placeholder='Select Task Urgency'
+                            selectedLabelStyle={{ fontWeight: 'bold', color: colors.cream }}
+                            placeholderStyle={{ fontWeight: 'bold', color: colors.cream }}
+                            labelStyle={{ color: colors.coffee }}>
                         </DropDownPicker>
                         <Image
                             source={require('../assets/task_category.png')}
@@ -151,7 +196,7 @@ function SendRequest({ route, navigation }) {
                                 <Animated.View style={[
                                     styles.fadingContainer,
                                     { borderWidth: fadeAnim1 }
-                                    ]}>
+                                ]}>
                                     <Image
                                         source={require('../assets/gardening_cat.png')}
                                         style={styles.cat_item}
@@ -175,7 +220,7 @@ function SendRequest({ route, navigation }) {
                                     { borderWidth: fadeAnim3 }
                                 ]}>
                                     <Image
-                                        source={require('../assets/gardening_cat.png')}
+                                        source={require('../assets/delivery_btn.png')}
                                         style={styles.cat_item}
                                     ></Image>
                                 </Animated.View>
@@ -185,8 +230,9 @@ function SendRequest({ route, navigation }) {
                 </ScrollView>
             </View>
             <View style={styles.barContainer}>
+
                 <TouchableOpacity
-                    onPress={(e) => handleKeyPress(e)}>
+                    onPress={() => setModalVisible(true)}>
                     <Image
                         source={require("../assets/post_request.png")}
                         style={styles.SendRequestButton}
@@ -198,6 +244,65 @@ function SendRequest({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        width: '100%',
+    },
+    modalView: {
+        backgroundColor: "white",
+        borderRadius: 20,
+        marginBottom: 80,
+        padding: 20,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    button: {
+        borderRadius: 10,
+        padding: 7,
+        backgroundColor: colors.secondary,
+    },
+    buttonContainer: {
+        paddingTop: 20,
+        paddingLeft: 70,
+        paddingRight: 70,
+        flexDirection: 'row',
+    },
+    buttonConfirm: {
+        marginRight: 10,
+    },
+    buttonClose: {
+        marginLeft: 10,
+    },
+    textStyle: {
+        color: "white",
+        textAlign: "center",
+        fontSize: 15,
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center"
+    },
+    minus: {
+        fontSize: 24,
+        color: colors.coffee,
+        fontWeight: "bold",
+        paddingTop: 57,
+    },
+    explain: {
+        paddingTop: 5,
+        fontSize: 15,
+        color: colors.coffee,
+        textAlign: 'center',
+    },
     parentContainer: {
         flex: 1,
     },
@@ -216,7 +321,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.secondary,
     },
     taskRequestContainer: {
-        flex:1,
+        flex: 1,
         backgroundColor: colors.cream,
         //marginHorizontal: 30,
         paddingHorizontal: 20,
@@ -245,7 +350,7 @@ const styles = StyleSheet.create({
         textAlignVertical: 'top',
     },
     titleTextInput: {
-        height:40,
+        height: 40,
         top: 10,
         //borderWidth: 1,
         //borderColor: colors.secondary,
