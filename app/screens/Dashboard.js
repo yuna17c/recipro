@@ -12,8 +12,8 @@ function Dashboard({ route, navigation }) {
 
     //const [bio, setBio] = React.useState('')
     const [name, setName] = React.useState('')
-    // const [location, setLocation] = React.useState('')
-    // const [job, setJob] = React.useState('')
+    const [location, setLocation] = React.useState('')
+    const [job, setJob] = React.useState('')
     // const [skill, setSkill] = React.useState('')
     // const [pb, setPb] = React.useState('')
     // const [points, setPoints] = React.useState('')
@@ -28,6 +28,8 @@ function Dashboard({ route, navigation }) {
                 //var bio = docSnapshot.get("bio");
 
                 setName(docSnapshot.get("name"));
+                setJob(docSnapshot.get("job"));
+                setLocation(docSnapshot.get("location"));
 
             }
         });
@@ -54,16 +56,20 @@ function Dashboard({ route, navigation }) {
                             style={styles.profilePic}>
                         </Image>
                         <Text style={styles.name}>{name}</Text>
-                        {/* <View style={styles.desc}>
-                            <Text style={{ fontSize: 15, position: 'absolute', marginTop: 240 }}>{job}</Text>
-                            <Text style={{ fontSize: 15, position: 'absolute', marginTop: 260 }}>{location}</Text>
+
+
+                        <Text style={{ fontSize: 15, position: 'absolute', marginTop: 240, right: 50, }}>{job}</Text>
+                        <Text style={{ fontSize: 15, position: 'absolute', marginTop: 260 }}>{location}</Text>
+                        <View style={styles.desc}>
+
                         </View>
-                        <Text style={{ width: '70%', fontSize: 15, position: 'absolute', alignSelf: 'center', marginTop: 280 }}>{bio}</Text>
+                        {/* <Text style={{ width: '70%', fontSize: 15, position: 'absolute', alignSelf: 'center', marginTop: 280 }}>{bio}</Text>
                         <View style={styles.skillContainer}>
                             <Text style={styles.item}>{skill[0]}</Text>
                             <Text style={styles.item}>{skill[1]}</Text>
                             <Text style={styles.item}>{skill[2]}</Text>
-                        </View> */}
+                        </View>  */}
+
                     </View>
                     <Image
                         source={require('../assets/portfolio_details.png')}
@@ -90,7 +96,7 @@ function Dashboard({ route, navigation }) {
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('SendRequest')}
+                        onPress={() => navigation.navigate('SendRequest', {userValue})}
                         style={styles.sendButton}>
                         <Image
                             source={require("../assets/sendButton.png")}
