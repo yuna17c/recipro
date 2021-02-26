@@ -21,25 +21,25 @@ function SendRequest({ route, navigation }) {
     const fadein1 = () => {
         // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(fadeAnim1, {
-            toValue: 1.5,
+            toValue: 2.3,
             duration: 90,
-            useNativeDriver: true,
+            useNativeDriver: false,
         }).start();
     };
     const fadein2 = () => {
         // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(fadeAnim2, {
-            toValue: 1.5,
+            toValue: 2.3,
             duration: 90,
-            useNativeDriver: true,
+            useNativeDriver: false,
         }).start();
     };
     const fadein3 = () => {
         // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(fadeAnim3, {
-            toValue: 1.5,
+            toValue: 2.3,
             duration: 90,
-            useNativeDriver: true,
+            useNativeDriver: false,
         }).start();
     };
 
@@ -276,8 +276,8 @@ const styles = StyleSheet.create({
     },
     fadingContainer: {
         backgroundColor: colors.secondary,
-        borderWidth: 1,
-        borderColor: colors.cream,
+        borderWidth: 10,
+        borderColor: colors.primary,
         borderRadius: 9,
         width: '92%',
         alignSelf: 'center'
