@@ -17,6 +17,7 @@ function Dashboard({ route, navigation }) {
     // const [skill, setSkill] = React.useState('')
     // const [pb, setPb] = React.useState('')
     // const [points, setPoints] = React.useState('')
+    
     const { userValue } = route.params;
     let user = firebase.firestore()
         .collection('users')
@@ -53,6 +54,7 @@ function Dashboard({ route, navigation }) {
                             style={styles.profilePic}>
                         </Image>
                         <Text style={styles.name}>{name}</Text>
+
                         {/* <View style={styles.desc}>
                             <Text style={{ fontSize: 15, position: 'absolute', marginTop: 240 }}>{job}</Text>
                             <Text style={{ fontSize: 15, position: 'absolute', marginTop: 260 }}>{location}</Text>
@@ -62,7 +64,7 @@ function Dashboard({ route, navigation }) {
                             <Text style={styles.item}>{skill[0]}</Text>
                             <Text style={styles.item}>{skill[1]}</Text>
                             <Text style={styles.item}>{skill[2]}</Text>
-                        </View> */}
+
                     </View>
                     <Image
                         source={require('../assets/portfolio_details.png')}
