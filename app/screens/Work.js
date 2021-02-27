@@ -4,6 +4,7 @@ import { Animated, ImageBackground, Text, TouchableOpacity, ScrollView, Image, S
 import colors from '../config/colors';
 import { render } from 'react-dom';
 import { color } from 'react-native-reanimated';
+import Swiper from 'react-native-swiper'
 
 function Work({ navigation }) {
     const fadeAnim1 = useRef(new Animated.Value(0)).current;
@@ -121,13 +122,14 @@ function Work({ navigation }) {
                         <View>
                             <ImageBackground
                                 source={require('../assets/gardening.png')}
-                                style={styles.gardening}
-                            >
-                                <View style={styles.gardenTasks}>
-                                    <TouchableOpacity onPress={() => navigation.navigate('Gardening')}>
+                                style={styles.gardening}>
+                                {/* <Text style={{top:100, marginBottom: 20,}}>HELLO</Text> */}
+                                <Swiper style={styles.gardenTasks}>
+                                    <TouchableOpacity>
+                                    {/* onPress={() => navigation.navigate('Gardening')} */}
                                         <Image source={require('../assets/garden1.png')}
-                                            style={{ flex: 1, marginRight: 5, borderRadius: 13 }}>
-
+                                        style={{alignSelf: 'center', borderRadius: 13 }}>
+                                        {/* style={{ flex: 1, marginRight: 5, borderRadius: 13 }} */}
                                         </Image>
                                     </TouchableOpacity>
                                     <TouchableOpacity>
@@ -136,7 +138,7 @@ function Work({ navigation }) {
 
                                         </Image>
                                     </TouchableOpacity>
-                                </View>
+                                </Swiper>
                             </ImageBackground>
                         </View>
                         <Image
@@ -168,13 +170,15 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     gardenTasks: {
-        flexDirection: 'row',
-        alignSelf: 'center',
-        alignContent: 'center',
-        width: '83%',
-        marginTop: 182,
-        paddingBottom: 39,
-        marginLeft: 8,
+        height: 200,
+        marginTop: 160,
+        // flexDirection: 'row',
+        // alignSelf: 'center',
+        // alignContent: 'center',
+        // width: '83%',
+        // marginTop: 182,
+        // paddingBottom: 39,
+        // marginLeft: 8,
     },
     container: {
         flex: 1,
@@ -215,17 +219,19 @@ const styles = StyleSheet.create({
         marginTop: 25,
         marginBottom: 19,
     },
-    plumbing: {
+    plumbing: { 
         alignSelf: 'center',
         marginTop: 30,
         marginBottom: 50,
     },
     gardening: {
         flex: 1,
-        width: '100%',
-        height: '100%',
         alignSelf: 'center',
-        marginTop: 30,
+        marginTop: 50,
+        marginHorizontal: 15,
+        paddingTop: 20,
+        paddingBottom:0,
+        paddingHorizontal:5,
     },
     frame: {
         alignSelf: 'center',

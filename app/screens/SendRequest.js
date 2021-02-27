@@ -4,6 +4,7 @@ import { Alert, Modal, TouchableOpacity, Animated, Pressable, Text, ImageBackgro
 import colors from '../config/colors';
 import { TextInput } from 'react-native-gesture-handler';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { firestore } from 'firebase';
 
 function SendRequest({ route, navigation }) {
     const { userValue } = route.params;
@@ -21,6 +22,9 @@ function SendRequest({ route, navigation }) {
     const [task_category, findCategory] = React.useState(0);
     const fadein1 = () => {
         findCategory(task_category + 2)
+        onSelectCategory("Gardening");
+        //console.log(task_category)
+        // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(fadeAnim1, {
             toValue: 2.3,
             duration: 90,
@@ -29,6 +33,8 @@ function SendRequest({ route, navigation }) {
     };
     const fadein2 = () => {
         findCategory(task_category + 3)
+        onSelectCategory("Plumbing");
+        // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(fadeAnim2, {
             toValue: 2.3,
             duration: 90,
@@ -37,6 +43,8 @@ function SendRequest({ route, navigation }) {
     };
     const fadein3 = () => {
         findCategory(task_category + 1)
+        onSelectCategory("Delivery");
+        // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(fadeAnim3, {
             toValue: 2.3,
             duration: 90,
@@ -54,6 +62,29 @@ function SendRequest({ route, navigation }) {
 
     points += (task_category * 2)
     console.log(points)
+    // console.log(task_category)
+    const confirmSend = e => {
+        setModalVisible(!modalVisible)
+        var rand = Math.floor(1000 + Math.random() * (9999 - 1000));
+        rand = rand.toString();
+        console.log(rand);
+        firestore()
+            .collection('tasks')
+            .doc(rand)
+            .set({
+                user: userValue,
+                title: taskTitle,
+                description: taskDescription,
+                location: taskLocation.value,
+                duration: taskDuration.value,
+                urgency: taskUrgency.value,
+                category: taskCategory,
+                points: points,
+            })
+            .then(() => {
+                console.log("task added");
+            })
+    }
 
     return (
         <View style={styles.parentContainer}>
@@ -72,7 +103,7 @@ function SendRequest({ route, navigation }) {
                         <View style={styles.buttonContainer}>
                             <Pressable
                                 style={[styles.button, styles.buttonConfirm]}
-                                onPress={() => setModalVisible(!modalVisible)}
+                                onPress={(e) => confirmSend(e)}
                             >
                                 <Text style={styles.textStyle}>Confirm</Text>
                             </Pressable>
