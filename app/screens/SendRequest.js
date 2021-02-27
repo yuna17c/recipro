@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { useRef, useState } from "react";
+import React, { Component, useRef, useState } from "react";
 import { Alert, Modal, TouchableOpacity, Animated, Pressable, Text, ImageBackground, ScrollView, Image, StyleSheet, View } from 'react-native';
 import colors from '../config/colors';
 import { TextInput } from 'react-native-gesture-handler';
@@ -13,19 +13,14 @@ function SendRequest({ route, navigation }) {
     const [taskDuration, onSelectDuration] = React.useState(0)
     const [taskUrgency, onSelectUrgency] = React.useState('')
     const [taskCategory, onSelectCategory] = React.useState('')
-    //console.log(taskDuration.value)
-    //console.log(task_category)
     const [modalVisible, setModalVisible] = useState(false);
-    var points = 0
-    var task_category = ''
+    var points = 0;
     const fadeAnim1 = useRef(new Animated.Value(0)).current;
     const fadeAnim2 = useRef(new Animated.Value(0)).current;
     const fadeAnim3 = useRef(new Animated.Value(0)).current;
-
+    const [task_category, findCategory] = React.useState(0);
     const fadein1 = () => {
-        task_category = 'gardening'
-        //console.log(task_category)
-        // Will change fadeAnim value to 1 in 5 seconds
+        findCategory(task_category + 2)
         Animated.timing(fadeAnim1, {
             toValue: 2.3,
             duration: 90,
@@ -33,7 +28,7 @@ function SendRequest({ route, navigation }) {
         }).start();
     };
     const fadein2 = () => {
-        // Will change fadeAnim value to 1 in 5 seconds
+        findCategory(task_category + 3)
         Animated.timing(fadeAnim2, {
             toValue: 2.3,
             duration: 90,
@@ -41,7 +36,7 @@ function SendRequest({ route, navigation }) {
         }).start();
     };
     const fadein3 = () => {
-        // Will change fadeAnim value to 1 in 5 seconds
+        findCategory(task_category + 1)
         Animated.timing(fadeAnim3, {
             toValue: 2.3,
             duration: 90,
@@ -53,12 +48,12 @@ function SendRequest({ route, navigation }) {
         points += 10
     } else if (taskDuration.value == 3 || taskDuration.value == 4) {
         points += 15
-    } else {
+    } else if (taskDuration.value == 5 || taskDuration.value == 6) {
         points += 20
     }
+
+    points += (task_category * 2)
     console.log(points)
-    // console.log(task_category)
-    const handleKeyPress = e => { }
 
     return (
         <View style={styles.parentContainer}>
@@ -89,7 +84,6 @@ function SendRequest({ route, navigation }) {
                             </Pressable>
                         </View>
                     </ImageBackground>
-
                 </View>
             </Modal>
             <View style={[styles.barContainer, modalVisible ? { opacity: 0.7 } : '']}>
@@ -192,7 +186,10 @@ function SendRequest({ route, navigation }) {
                             style={styles.taskTexts}>
                         </Image>
                         <View style={styles.category}>
-                            <TouchableOpacity style={styles.item} onPress={fadein1} >
+                            <Pressable
+                                style={styles.item}
+                                onPress={fadein1}
+                            >
                                 <Animated.View style={[
                                     styles.fadingContainer,
                                     { borderWidth: fadeAnim1 }
@@ -202,8 +199,10 @@ function SendRequest({ route, navigation }) {
                                         style={styles.cat_item}
                                     ></Image>
                                 </Animated.View>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.item} onPress={fadein2} >
+                            </Pressable>
+                            <Pressable
+                                style={styles.item}
+                                onPress={fadein2} >
                                 <Animated.View style={[
                                     styles.fadingContainer,
                                     { borderWidth: fadeAnim2 }
@@ -213,8 +212,10 @@ function SendRequest({ route, navigation }) {
                                         style={styles.cat_item}
                                     ></Image>
                                 </Animated.View>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.item} onPress={fadein3} >
+                            </Pressable>
+                            <TouchableOpacity
+                                style={styles.item}
+                                onPress={fadein3} >
                                 <Animated.View style={[
                                     styles.fadingContainer,
                                     { borderWidth: fadeAnim3 }
@@ -230,7 +231,6 @@ function SendRequest({ route, navigation }) {
                 </ScrollView>
             </View>
             <View style={styles.barContainer}>
-
                 <TouchableOpacity
                     onPress={() => setModalVisible(true)}>
                     <Image
@@ -267,7 +267,8 @@ const styles = StyleSheet.create({
     },
     button: {
         borderRadius: 10,
-        padding: 7,
+        paddingHorizontal: 8,
+        paddingVertical: 6,
         backgroundColor: colors.secondary,
     },
     buttonContainer: {
@@ -295,10 +296,10 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: colors.coffee,
         fontWeight: "bold",
-        paddingTop: 57,
+        paddingTop: 59,
     },
     explain: {
-        paddingTop: 5,
+        paddingTop: 6,
         fontSize: 15,
         color: colors.coffee,
         textAlign: 'center',
@@ -382,7 +383,7 @@ const styles = StyleSheet.create({
     fadingContainer: {
         backgroundColor: colors.secondary,
         borderWidth: 10,
-        borderColor: colors.primary,
+        borderColor: colors.coffee,
         borderRadius: 9,
         width: '92%',
         alignSelf: 'center'
