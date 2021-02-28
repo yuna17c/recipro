@@ -12,7 +12,6 @@ function Work({ navigation }) {
     const fadeAnim3 = useRef(new Animated.Value(0)).current;
 
     const fadein1 = () => {
-        // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(fadeAnim1, {
             toValue: 1,
             duration: 90,
@@ -21,7 +20,6 @@ function Work({ navigation }) {
     };
 
     const fadein2 = () => {
-        // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(fadeAnim2, {
             toValue: 1.5,
             duration: 90,
@@ -30,7 +28,6 @@ function Work({ navigation }) {
     };
 
     const fadein3 = () => {
-        // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(fadeAnim3, {
             toValue: 1.5,
             duration: 90,
@@ -126,10 +123,10 @@ function Work({ navigation }) {
                                 {/* <Text style={{top:100, marginBottom: 20,}}>HELLO</Text> */}
                                 <Swiper style={styles.gardenTasks}>
                                     <TouchableOpacity>
-                                    {/* onPress={() => navigation.navigate('Gardening')} */}
+                                        {/* onPress={() => navigation.navigate('Gardening')} */}
                                         <Image source={require('../assets/garden1.png')}
-                                        style={{alignSelf: 'center', borderRadius: 13 }}>
-                                        {/* style={{ flex: 1, marginRight: 5, borderRadius: 13 }} */}
+                                            style={{ alignSelf: 'center', borderRadius: 13 }}>
+                                            {/* style={{ flex: 1, marginRight: 5, borderRadius: 13 }} */}
                                         </Image>
                                     </TouchableOpacity>
                                     <TouchableOpacity>
@@ -219,7 +216,7 @@ const styles = StyleSheet.create({
         marginTop: 25,
         marginBottom: 19,
     },
-    plumbing: { 
+    plumbing: {
         alignSelf: 'center',
         marginTop: 30,
         marginBottom: 50,
@@ -230,8 +227,8 @@ const styles = StyleSheet.create({
         marginTop: 50,
         marginHorizontal: 15,
         paddingTop: 20,
-        paddingBottom:0,
-        paddingHorizontal:5,
+        paddingBottom: 0,
+        paddingHorizontal: 5,
     },
     frame: {
         alignSelf: 'center',

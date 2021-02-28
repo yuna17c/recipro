@@ -20,11 +20,10 @@ function SendRequest({ route, navigation }) {
     const fadeAnim2 = useRef(new Animated.Value(0)).current;
     const fadeAnim3 = useRef(new Animated.Value(0)).current;
     const [task_category, findCategory] = React.useState(0);
+
     const fadein1 = () => {
         findCategory(task_category + 2)
         onSelectCategory("Gardening");
-        //console.log(task_category)
-        // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(fadeAnim1, {
             toValue: 2.3,
             duration: 90,
@@ -34,7 +33,6 @@ function SendRequest({ route, navigation }) {
     const fadein2 = () => {
         findCategory(task_category + 3)
         onSelectCategory("Plumbing");
-        // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(fadeAnim2, {
             toValue: 2.3,
             duration: 90,

@@ -7,6 +7,7 @@ import "firebase/firestore";
 import * as firebase from 'firebase';
 import Login from './Login';
 import { color } from 'react-native-reanimated';
+import { FontAwesome, Entypo } from '@expo/vector-icons';
 
 function Dashboard({ route, navigation }) {
 
@@ -19,8 +20,12 @@ function Dashboard({ route, navigation }) {
     const [skill3, setSkill3] = React.useState('')
     const [pb, setPb] = React.useState('')
     const [points, setPoints] = React.useState('')
-    const [displayUser, setDisplayUser]= React.useState()
-
+    const [receivePoints, setReceivePoints] = React.useState('')
+    const [duration, setDuration] = React.useState('')
+    const [category, setCategory] = React.useState('')
+    const [displayUser, setDisplayUser] = React.useState()
+    console.log(points)
+    console.log(pb)
     const { userValue } = route.params;
     //setDisplayUser(require("../assets/"+userValue.toString()+".png"));
     let user = firebase.firestore()
@@ -33,9 +38,22 @@ function Dashboard({ route, navigation }) {
                 setName(docSnapshot.get("name"));
                 setJob(docSnapshot.get("occupation"));
                 setLocation(docSnapshot.get("location"));
+                setPb(docSnapshot.get("personalBest"));
+                setPoints(docSnapshot.get("points"));
                 setSkill1(docSnapshot.get("skill1"));
                 setSkill2(docSnapshot.get("skill2"));
                 setSkill3(docSnapshot.get("skill3"));
+            }
+        });
+    let tasks = firebase.firestore()
+        .collection('tasks')
+        .doc('2915')
+    tasks.get()
+        .then((docSnapshot) => {
+            if (docSnapshot.exists) {
+                setDuration(docSnapshot.get("duration"));
+                setCategory(docSnapshot.get("category"));
+                setReceivePoints(docSnapshot.get("points"));
             }
         });
     return (
@@ -57,16 +75,21 @@ function Dashboard({ route, navigation }) {
                         >
                         </Image>
                         <Image
-                            source={userValue=="4161112222"? require("../assets/4161112222.png"): require("../assets/9053334444.png")}
+                            source={userValue == "4161112222" ? require("../assets/4161112222.png") : require("../assets/9053334444.png")}
                             style={styles.profilePic}>
                         </Image>
                         <Text style={styles.name}>{name}</Text>
+                        <View style={styles.bioContainer}>
+                            <View style={styles.descContainer}>
+                                <FontAwesome name="suitcase" style={styles.bioIcon} />
+                                <Text style={styles.bioItem}>{job}</Text>
+                                <FontAwesome name="map-pin" style={styles.bioIcon} />
+                                <Text style={styles.bioItem}>{location}</Text>
 
+                            </View>
+                            <Text style={styles.bioLong}>{bio}</Text>
+                        </View>
 
-                        <Text style={{ color: colors.coffee, fontWeight: 'bold', fontSize: 15, position: 'absolute',alignSelf: 'center', marginTop:232 }}>{job}</Text>
-                        <Text style={{ color: colors.coffee, fontWeight: 'bold', fontSize: 15, position: 'absolute', marginTop: 253, alignSelf: 'center', }}>{location}</Text>
-                        <View style={styles.desc}></View>
-                        <Text style={{ width: '90%', color: colors.coffee, textAlign: 'center', fontSize: 15, position: 'absolute', alignSelf: 'center', marginTop: 280 }}>{bio}</Text>
                         <View style={styles.skillContainer}>
                             <Text style={styles.item}>{skill1}</Text>
                             <Text style={styles.item}>{skill2}</Text>
@@ -74,10 +97,42 @@ function Dashboard({ route, navigation }) {
                         </View>
 
                     </View>
-                    <Image
-                        source={require('../assets/portfolio_details.png')}
-                        style={styles.portfolioBox1}>
-                    </Image>
+                    <View style={styles.portfolioBox1}>
+
+                        <Text style={[styles.titles, styles.pointTitle]}>Your Points</Text>
+                        <View style={styles.pointBox}>
+                            <Image style={styles.pointImage} source={require('../assets/coin.png')} />
+                            <Text style={styles.pointItem1}>{points} Recipoints</Text>
+                            <Text style={styles.pointItem2}>personal best</Text>
+                        </View>
+
+                        <View style={styles.pointsBar}></View>
+                        <View style={styles.personalPoints}></View>
+                        <View style={styles.scoreCircle}></View>
+                        <Text style={styles.bestScore}>{pb}</Text>
+
+                        <Image style={styles.badges} source={require('../assets/Badges.png')} />
+
+                        <Text style={[styles.titles, styles.requestTitle]}>Active Requests</Text>
+                        <View style={styles.request}>
+                            <Text style={[styles.requestText, styles.requestPosted]}>Posted</Text>
+                            <Text style={[styles.requestText, styles.requestCat]}>{category}</Text>
+                            <Text style={[styles.requestText, styles.requestHours]}>{duration} hours</Text>
+                            <Image style={styles.requestImage} source={require('../assets/whiteCoin.png')} />
+                            <Text style={styles.requestPoint}>{receivePoints}</Text>
+                        </View>
+                        <View style={styles.request}>
+                            <Text style={[styles.requestText, styles.requestPosted]}>Posted</Text>
+                            <Text style={[styles.requestText, styles.requestCat]}>{category}</Text>
+                            <Text style={[styles.requestText, styles.requestHours]}>{duration} hours</Text>
+                            <Image style={styles.requestImage} source={require('../assets/whiteCoin.png')} />
+                            <Text style={styles.requestPoint}>{receivePoints}</Text>
+                        </View>
+
+                        <Text style={[styles.titles, styles.leaderTitle]}>Friend Leaderboard</Text>
+                        <Image style={styles.leaderImage} source={require('../assets/leaderboard.png')} />
+
+                    </View>
                 </ScrollView>
             </View>
             <View style={styles.barContainer}>
@@ -94,12 +149,12 @@ function Dashboard({ route, navigation }) {
                         onPress={() => navigation.navigate('Work')}
                         style={styles.workButton}>
                         <Image
-                            source={ require("../assets/workButton.png")}
+                            source={require("../assets/workButton.png")}
                             style={styles.buttonItem}
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('SendRequest', {userValue})}
+                        onPress={() => navigation.navigate('SendRequest', { userValue })}
                         style={styles.sendButton}>
                         <Image
                             source={require("../assets/sendButton.png")}
@@ -107,7 +162,7 @@ function Dashboard({ route, navigation }) {
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('Message', {userValue})}
+                        onPress={() => navigation.navigate('Message', { userValue })}
                         style={styles.chatButton}>
                         <Image
                             source={require("../assets/chatButton.png")}
@@ -122,6 +177,161 @@ function Dashboard({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+    leaderImage: {
+        alignSelf: 'center',
+        marginBottom: 20,
+    },
+    leaderTitle: {
+        marginVertical: 20,
+    },
+    requestTitle: {
+        marginBottom: 15,
+    },
+    badges: {
+        marginBottom: 20,
+    },
+    pointTitle: {
+        margin: 21,
+    },
+    request: {
+        flexDirection: 'row',
+        backgroundColor: colors.secondary,
+        borderRadius: 7,
+        width: '82%',
+        alignSelf: 'center',
+        paddingVertical: 6,
+        marginBottom: 10,
+
+    },
+    requestPosted: {
+        width: '23%',
+        fontWeight: 'bold',
+    },
+    requestHours: {
+        width: '23%'
+    },
+    requestCat: {
+        width: '29%',
+    },
+    requestImage: {
+        width: '9%',
+        resizeMode: 'contain',
+        height: '100%',
+    },
+    requestPoint: {
+        fontSize: 16,
+        color: colors.cream,
+        width: '10%',
+    },
+    requestText: {
+        fontSize: 16,
+        color: colors.cream,
+        textAlign: 'center',
+    },
+    titles: {
+        fontSize: 24,
+        color: colors.coffee,
+        fontWeight: 'bold',
+        marginLeft: 25,
+    },
+    bestScore: {
+        position: 'absolute',
+        marginTop: 112,
+        marginLeft: 324.5,
+        color: colors.cream,
+    },
+    scoreCircle: {
+        borderRadius: 50,
+        backgroundColor: colors.secondary,
+        width: 34,
+        height: 34,
+        position: 'absolute',
+        marginTop: 105,
+        marginLeft: 320,
+    },
+    pointImage: {
+        width: '9%',
+        resizeMode: 'contain'
+    },
+    pointItem1: {
+        width: '59%',
+        color: colors.primary,
+        fontSize: 20,
+        fontWeight: 'bold',
+        paddingLeft: 10,
+    },
+    pointItem2: {
+        width: '32%',
+        color: colors.primary,
+        fontSize: 16,
+        alignSelf: 'flex-end'
+    },
+    pointBox: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        width: '90%',
+        alignSelf: 'center'
+    },
+    personalPoints: {
+        backgroundColor: colors.primary,
+        width: 250,
+        borderRadius: 25,
+        padding: 6,
+        marginLeft: '6%',
+        position: 'absolute',
+        marginTop: 117,
+    },
+    pointsBar: {
+        backgroundColor: colors.orange,
+        width: '84%',
+        padding: 6,
+        borderRadius: 25,
+        marginTop: 15,
+        alignSelf: 'center',
+        marginBottom: 10,
+    },
+    bioContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        width: '84%',
+        position: 'absolute',
+        alignSelf: 'center',
+        marginTop: 235,
+    },
+    descContainer: {
+        width: '80%',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        alignSelf: 'center',
+        marginLeft: '11%',
+    },
+    bioLong: {
+        width: '100%',
+        color: colors.coffee,
+        fontSize: 15,
+        marginLeft: '3%'
+    },
+    bioItem: {
+        width: '89%',
+        color: colors.coffee,
+        fontWeight: 'bold',
+        fontSize: 14,
+        alignSelf: 'center',
+        marginBottom: 3,
+    },
+    bioIcon: {
+        width: '11%',
+        color: colors.coffee,
+        fontSize: 15,
+        alignSelf: 'center',
+        textAlign: 'center',
+    },
+    job: {
+        paddingTop: 0,
+    },
+    location: {
+        marginTop: 250,
+    },
     parentContainer: {
         flex: 1,
     },
@@ -156,16 +366,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '80%',
         position: 'absolute',
-        marginTop: 300,
+        marginTop: 330,
         alignSelf: 'center',
     },
     item: {
         flex: 1,
         borderRadius: 9,
-        paddingTop: 8,
-        paddingBottom: 8,
-        margin: 5,
-        marginTop: 30,
+        margin: 4,
+        paddingHorizontal: 7,
+        paddingVertical: 5,
         backgroundColor: colors.primary,
         alignSelf: 'center',
         textAlign: 'center',
@@ -176,12 +385,14 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     },
     portfolioBox1: {
-        bottom: 0,
+        flex: 1,
+        backgroundColor: 'white',
+        borderRadius: 20,
     },
     profilePic: {
         position: 'absolute',
         alignSelf: 'center',
-        marginTop: 25,
+        marginTop: 20,
     },
     profileName: {
         position: 'absolute',
@@ -216,10 +427,10 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     name: {
-        fontSize: 25,
+        fontSize: 28,
         position: 'absolute',
         alignSelf: 'center',
-        marginTop: 200,
+        marginTop: 193,
         color: colors.primary,
         fontWeight: 'bold',
     }
