@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Alert, Modal, StyleSheet, Image, Text, Pressable, View, ImageBackground } from "react-native";
-
+import { Ionicons } from '@expo/vector-icons';
 const practice = () => {
     const [modalVisible, setModalVisible] = useState(false);
     return (
@@ -14,6 +14,7 @@ const practice = () => {
                     setModalVisible(!modalVisible);
                 }}
             >
+                <Ionicons name="md-checkmark-circle" size={32} color="green" />
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <Text style={styles.modalText}>Hello World!</Text>
