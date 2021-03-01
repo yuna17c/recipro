@@ -24,8 +24,8 @@ function Dashboard({ route, navigation }) {
     const [duration, setDuration] = React.useState('')
     const [category, setCategory] = React.useState('')
     const [displayUser, setDisplayUser] = React.useState()
-    console.log(points)
-    console.log(pb)
+    // console.log(points)
+    // console.log(pb)
     const { userValue } = route.params;
     //setDisplayUser(require("../assets/"+userValue.toString()+".png"));
     let user = firebase.firestore()
@@ -146,7 +146,7 @@ function Dashboard({ route, navigation }) {
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('Work')}
+                        onPress={() => navigation.navigate('Work', {userValue})}
                         style={styles.workButton}>
                         <Image
                             source={require("../assets/workButton.png")}
