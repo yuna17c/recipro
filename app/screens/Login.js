@@ -1,32 +1,30 @@
 import React, { Component } from 'react';
-import { TextInput, Image, ImageBackground, StyleSheet, Platform, StatusBar, View, Alert, LogBox} from 'react-native';
+import { TextInput, Image, ImageBackground, StyleSheet, Platform, StatusBar, View, Alert, LogBox } from 'react-native';
 import BatchedBridge from 'react-native/Libraries/BatchedBridge/BatchedBridge';
 import colors from '../config/colors';
 import 'react-native-gesture-handler';
 TextInput.defaultProps.selectionColor = 'rgba(254, 182, 0, 0.5)';
 import "firebase/firestore";
-import {firebase} from '../config/firebase';
+import { firebase } from '../config/firebase';
 LogBox.ignoreLogs(['Setting a timer']);
 
 function Login({ navigation }) {
-
     const handleKeyPress = e => {
         let user = firebase.firestore()
             .collection('users')
             .doc(userValue)
 
         user.get()
-            .then((docSnapshot)=> {
+            .then((docSnapshot) => {
                 if (docSnapshot.exists) {
                     let pass = docSnapshot.get("password");
                     console.log(pass);
-                    if (pass==passValue) navigation.navigate('Dashboard', {userValue});
+                    if (pass == passValue) navigation.navigate('Dashboard', { userValue });
                     else {
                         Alert.alert(
                             "Your password does not match our records!"
                         );
                     }
-                    
                 }
                 else {
                     Alert.alert(

@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { Component, useRef, useState } from "react";
+import React, { Component, useRef, useState, useEffect } from "react";
 import { Alert, Modal, TouchableOpacity, Animated, Pressable, Text, ImageBackground, ScrollView, Image, StyleSheet, View } from 'react-native';
 import colors from '../config/colors';
 import { TextInput } from 'react-native-gesture-handler';
@@ -57,10 +57,7 @@ function SendRequest({ route, navigation }) {
     } else if (taskDuration.value == 5 || taskDuration.value == 6) {
         points += 20
     }
-
     points += (task_category * 2)
-    console.log(points)
-    // console.log(task_category)
     const confirmSend = e => {
         setModalVisible(!modalVisible)
         var rand = Math.floor(1000 + Math.random() * (9999 - 1000));
@@ -79,8 +76,15 @@ function SendRequest({ route, navigation }) {
                 category: taskCategory,
                 points: points,
             })
+        firestore()
+            .collection('users')
+            .doc(userValue)
+            .update({
+                task1: rand.toString(),
+            })
             .then(() => {
                 console.log("task added");
+                navigation.navigate('Dashboard')
             })
     }
 

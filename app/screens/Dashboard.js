@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ImageBackground, TouchableOpacity, Text, contentContainerStyle, ScrollView, Image, StyleSheet, Platform, StatusBar, View, Button, LogBox } from 'react-native';
 import colors from '../config/colors';
 import { back } from 'react-native/Libraries/Animated/src/Easing';
@@ -7,10 +7,10 @@ import "firebase/firestore";
 import * as firebase from 'firebase';
 import Login from './Login';
 import { color } from 'react-native-reanimated';
-import { FontAwesome, Entypo } from '@expo/vector-icons';
+import { FontAwesome, FontAwesome5, Entypo } from '@expo/vector-icons';
+import { firestore } from 'firebase';
 
 function Dashboard({ route, navigation }) {
-
     const [bio, setBio] = React.useState('')
     const [name, setName] = React.useState('')
     const [location, setLocation] = React.useState('')
@@ -20,15 +20,13 @@ function Dashboard({ route, navigation }) {
     const [skill3, setSkill3] = React.useState('')
     const [pb, setPb] = React.useState('')
     const [points, setPoints] = React.useState('')
-    const [receivePoints, setReceivePoints] = React.useState('')
-    const [duration, setDuration] = React.useState('')
-    const [category, setCategory] = React.useState('')
+    const [task1, setTask] = React.useState('')
+    const [taskCategory, setCat] = React.useState('')
+    const [taskDisplay, setTaskDisplay] = React.useState([]);
     const [displayUser, setDisplayUser] = React.useState()
-    console.log(points)
-    console.log(pb)
     const { userValue } = route.params;
     //setDisplayUser(require("../assets/"+userValue.toString()+".png"));
-    let user = firebase.firestore()
+    let user = firestore()
         .collection('users')
         .doc(userValue)
     user.get()
@@ -43,25 +41,39 @@ function Dashboard({ route, navigation }) {
                 setSkill1(docSnapshot.get("skill1"));
                 setSkill2(docSnapshot.get("skill2"));
                 setSkill3(docSnapshot.get("skill3"));
+                setTask(docSnapshot.get("task1"));
             }
         });
-    let tasks = firebase.firestore()
-        .collection('tasks')
-        .doc('2915')
-    tasks.get()
-        .then((docSnapshot) => {
-            if (docSnapshot.exists) {
-                setDuration(docSnapshot.get("duration"));
-                setCategory(docSnapshot.get("category"));
-                setReceivePoints(docSnapshot.get("points"));
-            }
-        });
+    useEffect(() => {
+        const subscriber =
+            firestore().collection('tasks').where("user", "==", userValue)
+                .get()
+                .then((docSnapshot) => {
+                    const taskData = []
+                    docSnapshot.forEach((doc) => {
+                        taskData.push(doc.data())
+                    });
+
+                    setTaskDisplay(taskData)
+                })
+                .catch((error) => {
+                    console.log("Error getting documents: ", error);
+                });
+        return () => subscriber;
+    }, [{ task1 }])
+    const displayByArray = taskDisplay.map((item, index) =>
+        <View key={index} style={styles.request}>
+            <Text style={[styles.requestText, styles.requestPosted]}>Pending</Text>
+            <Text style={[styles.requestText, styles.requestCat]}>{item.category}</Text>
+            <Image style={styles.requestImage} source={require('../assets/whiteCoin.png')} />
+            <Text style={styles.requestPoint}>{item.points}</Text>
+            <FontAwesome5 name="check-circle" style={styles.requestIcon} />
+        </View>
+    )
+
     return (
         <View style={styles.parentContainer}>
             <View style={styles.container}>
-                <View>
-                    { }
-                </View>
                 <ScrollView >
                     <Image
                         source={require('../assets/logo.png')}
@@ -114,21 +126,7 @@ function Dashboard({ route, navigation }) {
                         <Image style={styles.badges} source={require('../assets/Badges.png')} />
 
                         <Text style={[styles.titles, styles.requestTitle]}>Active Requests</Text>
-                        <View style={styles.request}>
-                            <Text style={[styles.requestText, styles.requestPosted]}>Posted</Text>
-                            <Text style={[styles.requestText, styles.requestCat]}>{category}</Text>
-                            <Text style={[styles.requestText, styles.requestHours]}>{duration} hours</Text>
-                            <Image style={styles.requestImage} source={require('../assets/whiteCoin.png')} />
-                            <Text style={styles.requestPoint}>{receivePoints}</Text>
-                        </View>
-                        <View style={styles.request}>
-                            <Text style={[styles.requestText, styles.requestPosted]}>Posted</Text>
-                            <Text style={[styles.requestText, styles.requestCat]}>{category}</Text>
-                            <Text style={[styles.requestText, styles.requestHours]}>{duration} hours</Text>
-                            <Image style={styles.requestImage} source={require('../assets/whiteCoin.png')} />
-                            <Text style={styles.requestPoint}>{receivePoints}</Text>
-                        </View>
-
+                        {displayByArray}
                         <Text style={[styles.titles, styles.leaderTitle]}>Friend Leaderboard</Text>
                         <Image style={styles.leaderImage} source={require('../assets/leaderboard.png')} />
 
@@ -172,11 +170,15 @@ function Dashboard({ route, navigation }) {
                 </View>
             </View>
         </View>
-
     );
 }
 
 const styles = StyleSheet.create({
+    requestIcon: {
+        fontSize: 24,
+        color: "white",
+        width: '12%',
+    },
     leaderImage: {
         alignSelf: 'center',
         marginBottom: 20,
@@ -201,17 +203,13 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         paddingVertical: 6,
         marginBottom: 10,
-
     },
     requestPosted: {
-        width: '23%',
+        width: '25%',
         fontWeight: 'bold',
     },
-    requestHours: {
-        width: '23%'
-    },
     requestCat: {
-        width: '29%',
+        width: '38%',
     },
     requestImage: {
         width: '9%',
@@ -220,8 +218,9 @@ const styles = StyleSheet.create({
     },
     requestPoint: {
         fontSize: 16,
+        width: '16%',
+        paddingLeft: 5,
         color: colors.cream,
-        width: '10%',
     },
     requestText: {
         fontSize: 16,
