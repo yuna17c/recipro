@@ -1,12 +1,14 @@
 import 'react-native-gesture-handler';
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Animated, ImageBackground, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Platform, StatusBar, View, Button, LogBox } from 'react-native';
 import colors from '../config/colors';
 import { render } from 'react-dom';
 import { color } from 'react-native-reanimated';
-import Swiper from 'react-native-swiper'
+import Swiper from 'react-native-swiper';
+import { firestore } from 'firebase';
 
-function Work({ navigation }) {
+function Work({ route, navigation }) {
+    const { userValue } = route.params;
     const fadeAnim1 = useRef(new Animated.Value(0)).current;
     const fadeAnim2 = useRef(new Animated.Value(0)).current;
     const fadeAnim3 = useRef(new Animated.Value(0)).current;
@@ -39,6 +41,44 @@ function Work({ navigation }) {
         alert("clicked")
         console.log(id)
     }
+
+    const [taskDisplay, setTaskDisplay]= React.useState([]);
+    const addMoreTask = (newTask) => {
+        setTaskDisplay({taskDisplay: [...taskDisplay, newTask]});
+      }
+
+    firestore()
+        .collection("tasks")
+        .where("user","==","9053334444")
+        .get()
+        .then((docSnapshot)=>{
+            const taskArray =[];
+            docSnapshot.forEach((doc)=>{
+                //console.log(doc.get("category"));
+                taskArray.push(doc.data());
+                // addMoreTask({
+                //     id: taskDisplay.length,
+                //     category: doc.get("category"),
+                // })
+            })
+            setTaskDisplay(taskArray);
+        })
+    
+    //const arr = [...taskDisplay].map((_, i) => i);
+    //console.log(taskDisplay.length);
+
+    const displayByArray = taskDisplay.map((item, index)=>
+        <View key = {index} 
+            style={{flex:1, flexDirection: 'row', alignContent: 'center'}}>
+            <TouchableOpacity>
+                <Image source={require('../assets/task_place.png')}
+                    style={{ alignSelf: 'center', borderRadius: 13, marginHorizontal:10, }}>
+                </Image>
+            </TouchableOpacity>
+        </View>
+    )
+
+
     return (
         <View style={styles.parentContainer}>
             <View style={styles.container}>
@@ -119,30 +159,51 @@ function Work({ navigation }) {
                         <View>
                             <ImageBackground
                                 source={require('../assets/gardening.png')}
-                                style={styles.gardening}>
-                                {/* <Text style={{top:100, marginBottom: 20,}}>HELLO</Text> */}
-                                <Swiper style={styles.gardenTasks}>
+                                style={styles.taskContainer}>
+                                <Swiper style={styles.taskSubContainer} activeDotColor={colors.secondary}>
+                                    {displayByArray}
+                                    <View style={{flex:1, flexDirection: 'row', alignContent: 'center'}}>
                                     <TouchableOpacity>
-                                        {/* onPress={() => navigation.navigate('Gardening')} */}
                                         <Image source={require('../assets/garden1.png')}
-                                            style={{ alignSelf: 'center', borderRadius: 13 }}>
-                                            {/* style={{ flex: 1, marginRight: 5, borderRadius: 13 }} */}
+                                            style={{ alignSelf: 'center', borderRadius: 13, marginLeft:26, marginRight: 10 }}>
                                         </Image>
                                     </TouchableOpacity>
                                     <TouchableOpacity>
                                         <Image source={require('../assets/garden2.png')}
-                                            style={{ flex: 1, marginLeft: 5, borderRadius: 13 }}>
+                                            style={{ alignSelf: 'center', borderRadius: 13, marginRight:26, marginLeft: 10}}>
 
                                         </Image>
                                     </TouchableOpacity>
+                                    </View>
                                 </Swiper>
                             </ImageBackground>
                         </View>
-                        <Image
-                            source={require('../assets/plumbing.png')}
-                            style={styles.plumbing}
-                        >
-                        </Image>
+                        <View>
+                            <ImageBackground
+                                source={require('../assets/plumbing.png')}
+                                style={styles.taskContainer}>
+                                    <Swiper style={styles.taskSubContainer} activeDotColor={colors.secondary}>
+                                        <View style={{flex:1, flexDirection: 'row', alignContent: 'center'}}>
+                                        <TouchableOpacity>
+                                            <Image source={require('../assets/garden1.png')}
+                                                style={{ alignSelf: 'center', borderRadius: 13, marginLeft:26, marginRight: 10 }}>
+                                            </Image>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity>
+                                            <Image source={require('../assets/garden2.png')}
+                                                style={{ alignSelf: 'center', borderRadius: 13, marginRight:26, marginLeft: 10}}>
+
+                                            </Image>
+                                        </TouchableOpacity>
+                                        </View>
+                                        <TouchableOpacity>
+                                            <Image source={require('../assets/garden1.png')}
+                                                style={{ alignSelf: 'center', borderRadius: 13, marginHorizontal:10, }}>
+                                            </Image>
+                                        </TouchableOpacity>
+                                    </Swiper>
+                            </ImageBackground>
+                        </View>
                     </ScrollView>
                 </View>
             </View>
@@ -166,16 +227,9 @@ const styles = StyleSheet.create({
         width: '92%',
         alignSelf: 'center'
     },
-    gardenTasks: {
+    taskSubContainer: {
         height: 200,
         marginTop: 160,
-        // flexDirection: 'row',
-        // alignSelf: 'center',
-        // alignContent: 'center',
-        // width: '83%',
-        // marginTop: 182,
-        // paddingBottom: 39,
-        // marginLeft: 8,
     },
     container: {
         flex: 1,
@@ -216,12 +270,8 @@ const styles = StyleSheet.create({
         marginTop: 25,
         marginBottom: 19,
     },
-    plumbing: {
-        alignSelf: 'center',
-        marginTop: 30,
-        marginBottom: 50,
-    },
-    gardening: {
+
+    taskContainer: {
         flex: 1,
         alignSelf: 'center',
         marginTop: 50,
@@ -234,6 +284,6 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginTop: 30,
     },
-})
+});
 
 export default Work;
