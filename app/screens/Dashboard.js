@@ -24,8 +24,8 @@ function Dashboard({ route, navigation }) {
     const [taskCategory, setCat] = React.useState('')
     const [taskDisplay, setTaskDisplay] = React.useState([]);
     const [displayUser, setDisplayUser] = React.useState()
-
     const { userValue } = route.params;
+
     //setDisplayUser(require("../assets/"+userValue.toString()+".png"));
     let user = firestore()
         .collection('users')
@@ -61,7 +61,7 @@ function Dashboard({ route, navigation }) {
                     console.log("Error getting documents: ", error);
                 });
         return () => subscriber;
-    }, [{ task1 }])
+    }, [{task1}])
     const displayByArray = taskDisplay.map((item, index) =>
         <View key={index} style={styles.request}>
             <Text style={[styles.requestText, styles.requestPosted]}>Pending</Text>
