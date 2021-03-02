@@ -75,6 +75,7 @@ function SendRequest({ route, navigation }) {
                 urgency: taskUrgency.value,
                 category: taskCategory,
                 points: points,
+                time: firestore.Timestamp.now(),
             })
         firestore()
             .collection('users')

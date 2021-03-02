@@ -6,6 +6,7 @@ import { render } from 'react-dom';
 import { color } from 'react-native-reanimated';
 import Swiper from 'react-native-swiper';
 import { firestore } from 'firebase';
+import { storage } from 'firebase';
 
 function Work({ route, navigation }) {
     const { userValue } = route.params;
@@ -37,46 +38,69 @@ function Work({ route, navigation }) {
         }).start();
     };
 
-    const clicked = (id) => {
-        alert("clicked")
-        console.log(id)
+    // const clicked = (id) => {
+    //     alert("clicked")
+    //     console.log(id)
+    // }
+
+
+    const [taskDisplay, setTaskDisplay] = React.useState([]);
+    //const [otherUser, setOtherUser]=React.useState('')
+    var otherUser = "";
+    const [task1, setTask] = React.useState('')
+    const [imageArray, setImageArray] = React.useState([]);
+
+    //const reference = storage().ref('garden1.png').getDownloadURL();
+
+    if (userValue == "4161112222") {
+        otherUser = "9053334444";
     }
+    else otherUser = "4161112222";
 
-    const [taskDisplay, setTaskDisplay]= React.useState([]);
-    const addMoreTask = (newTask) => {
-        setTaskDisplay({taskDisplay: [...taskDisplay, newTask]});
-      }
+    // findOtherUser();
+    // console.log(otherUser);
 
-    firestore()
-        .collection("tasks")
-        .where("user","==","9053334444")
-        .get()
-        .then((docSnapshot)=>{
-            const taskArray =[];
-            docSnapshot.forEach((doc)=>{
-                //console.log(doc.get("category"));
-                taskArray.push(doc.data());
-                // addMoreTask({
-                //     id: taskDisplay.length,
-                //     category: doc.get("category"),
-                // })
-            })
-            setTaskDisplay(taskArray);
-        })
-    
+    let user = firestore()
+        .collection('users')
+        .doc(otherUser)
+    user.get()
+        .then((docSnapshot) => {
+            if (docSnapshot.exists) {
+                setTask(docSnapshot.get("task1"));
+            }
+        });
+
+    useEffect(() => {
+        const subscriber =
+            firestore().collection("tasks").where("user", "==", otherUser).orderBy("time", "desc")
+                .get()
+                .then((docSnapshot) => {
+                    const taskArray = [];
+                    docSnapshot.forEach((doc) => {
+                        taskArray.push(doc.data());
+                    })
+                    setTaskDisplay(taskArray);
+                })
+                .catch((error) => {
+                    console.log("Error getting documents: ", error);
+                });
+        return () => subscriber;
+    }, [task1])
+
+
     //const arr = [...taskDisplay].map((_, i) => i);
     //console.log(taskDisplay.length);
 
-    const displayByArray = taskDisplay.map((item, index)=>
-        <View key = {index} 
-            style={{flex:1, flexDirection: 'row', alignContent: 'center'}}>
-            <TouchableOpacity>
-                <Image source={require('../assets/task_place.png')}
-                    style={{ alignSelf: 'center', borderRadius: 13, marginHorizontal:10, }}>
-                </Image>
-            </TouchableOpacity>
-        </View>
+
+    const displayGardenArray = taskDisplay.map((item, index) =>
+        <TouchableOpacity key={index} onPress={() => navigation.navigate('Gardening')}>
+            <Image source={item.image == "../assets/garden1.png" ? require("../assets/garden1.png") : item.image == "../assets/garden2.png" ? require("../assets/garden2.png") : require("../assets/task_place.png")}
+                style={{ alignSelf: 'center', borderRadius: 13, marginHorizontal: 10, }}>
+            </Image>
+        </TouchableOpacity>
     )
+    {/* <Image source={item.image=="../assets/garden1.png"? require("../assets/garden1.png"): item.image=="../assets/garden2.png"? require("../assets/garden2.png"): require("../assets/task_place.png") } */ }
+    {/* <Image source = {require("../assets/garden1.png")} */ }
 
 
     return (
@@ -160,21 +184,8 @@ function Work({ route, navigation }) {
                             <ImageBackground
                                 source={require('../assets/gardening.png')}
                                 style={styles.taskContainer}>
-                                <Swiper style={styles.taskSubContainer} activeDotColor={colors.secondary}>
-                                    {displayByArray}
-                                    <View style={{flex:1, flexDirection: 'row', alignContent: 'center'}}>
-                                    <TouchableOpacity>
-                                        <Image source={require('../assets/garden1.png')}
-                                            style={{ alignSelf: 'center', borderRadius: 13, marginLeft:26, marginRight: 10 }}>
-                                        </Image>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity>
-                                        <Image source={require('../assets/garden2.png')}
-                                            style={{ alignSelf: 'center', borderRadius: 13, marginRight:26, marginLeft: 10}}>
-
-                                        </Image>
-                                    </TouchableOpacity>
-                                    </View>
+                                <Swiper style={styles.taskSubContainer} loop={false} showsPagination={false}>
+                                    {displayGardenArray}
                                 </Swiper>
                             </ImageBackground>
                         </View>
@@ -182,26 +193,40 @@ function Work({ route, navigation }) {
                             <ImageBackground
                                 source={require('../assets/plumbing.png')}
                                 style={styles.taskContainer}>
-                                    <Swiper style={styles.taskSubContainer} activeDotColor={colors.secondary}>
-                                        <View style={{flex:1, flexDirection: 'row', alignContent: 'center'}}>
-                                        <TouchableOpacity>
-                                            <Image source={require('../assets/garden1.png')}
-                                                style={{ alignSelf: 'center', borderRadius: 13, marginLeft:26, marginRight: 10 }}>
-                                            </Image>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity>
-                                            <Image source={require('../assets/garden2.png')}
-                                                style={{ alignSelf: 'center', borderRadius: 13, marginRight:26, marginLeft: 10}}>
-
-                                            </Image>
-                                        </TouchableOpacity>
-                                        </View>
-                                        <TouchableOpacity>
-                                            <Image source={require('../assets/garden1.png')}
-                                                style={{ alignSelf: 'center', borderRadius: 13, marginHorizontal:10, }}>
-                                            </Image>
-                                        </TouchableOpacity>
-                                    </Swiper>
+                                <Swiper style={styles.taskSubContainer} showsPagination={false} loop={false}>
+                                    {/* <View style={{flex:1, flexDirection: 'row', alignContent: 'center'}}>
+                                        </View> */}
+                                    <TouchableOpacity>
+                                        <Image source={require('../assets/garden1.png')}
+                                            style={{ alignSelf: 'center', borderRadius: 13, marginHorizontal: 10, }}>
+                                        </Image>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity>
+                                        <Image source={require('../assets/garden1.png')}
+                                            style={{ alignSelf: 'center', borderRadius: 13, marginRight: 26, marginLeft: 10 }}>
+                                        </Image>
+                                    </TouchableOpacity>
+                                </Swiper>
+                            </ImageBackground>
+                        </View>
+                        <View>
+                            <ImageBackground
+                                source={require('../assets/delivery.png')}
+                                style={styles.taskContainer}>
+                                <Swiper style={styles.taskSubContainer} showsPagination={false} loop={false}>
+                                    {/* <View style={{flex:1, flexDirection: 'row', alignContent: 'center'}}>
+                                        </View> */}
+                                    <TouchableOpacity>
+                                        <Image source={require('../assets/garden1.png')}
+                                            style={{ alignSelf: 'center', borderRadius: 13, marginHorizontal: 10, }}>
+                                        </Image>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity>
+                                        <Image source={require('../assets/garden1.png')}
+                                            style={{ alignSelf: 'center', borderRadius: 13, marginRight: 26, marginLeft: 10 }}>
+                                        </Image>
+                                    </TouchableOpacity>
+                                </Swiper>
                             </ImageBackground>
                         </View>
                     </ScrollView>
