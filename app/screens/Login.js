@@ -6,6 +6,7 @@ import 'react-native-gesture-handler';
 TextInput.defaultProps.selectionColor = 'rgba(254, 182, 0, 0.5)';
 import "firebase/firestore";
 import { firebase } from '../config/firebase';
+import { set } from 'react-native-reanimated';
 LogBox.ignoreLogs(['Setting a timer']);
 
 function Login({ navigation }) {
@@ -19,7 +20,9 @@ function Login({ navigation }) {
                 if (docSnapshot.exists) {
                     let pass = docSnapshot.get("password");
                     console.log(pass);
-                    if (pass == passValue) navigation.navigate('Dashboard', { userValue });
+                    if (pass == passValue) {
+                        navigation.navigate('Dashboard', { userValue })
+                    }
                     else {
                         Alert.alert(
                             "Your password does not match our records!"
