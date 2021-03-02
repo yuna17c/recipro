@@ -1,7 +1,8 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect } from 'react';
-import { ImageBackground, TouchableOpacity, Text, contentContainerStyle, ScrollView, Image, StyleSheet, Platform, StatusBar, View, Button, LogBox } from 'react-native';
+import { ImageBackground, TouchableOpacity, Text, contentContainerStyle, ScrollView, Image, StyleSheet, Platform, StatusBar, View, Button, LogBox, Pressable } from 'react-native';
 import colors from '../config/colors';
+import { useIsFocused } from '@react-navigation/native';
 import { back } from 'react-native/Libraries/Animated/src/Easing';
 import "firebase/firestore";
 import * as firebase from 'firebase';
@@ -27,6 +28,13 @@ function Dashboard({ route, navigation }) {
     const { userValue } = route.params;
 
     //setDisplayUser(require("../assets/"+userValue.toString()+".png"));
+
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        //console.log(task1)
+    }, [isFocused]);
+
     let user = firestore()
         .collection('users')
         .doc(userValue)
@@ -54,6 +62,7 @@ function Dashboard({ route, navigation }) {
                     docSnapshot.forEach((doc) => {
                         taskData.push(doc.data())
                     });
+                    //console.log("yes")
 
                     setTaskDisplay(taskData)
                 })
@@ -61,7 +70,7 @@ function Dashboard({ route, navigation }) {
                     console.log("Error getting documents: ", error);
                 });
         return () => subscriber;
-    }, [{task1}])
+    }, [task1])
     const displayByArray = taskDisplay.map((item, index) =>
         <View key={index} style={styles.request}>
             <Text style={[styles.requestText, styles.requestPosted]}>Pending</Text>
@@ -124,12 +133,23 @@ function Dashboard({ route, navigation }) {
                         <View style={styles.scoreCircle}></View>
                         <Text style={styles.bestScore}>{pb}</Text>
 
-                        <Image style={styles.badges} source={require('../assets/Badges.png')} />
+                        <Image
+                            source={userValue == "4161112222" ? require("../assets/badges.png") : require("../assets/badges_raj.png")}
+                            style={styles.badges}>
+                        </Image>
+
 
                         <Text style={[styles.titles, styles.requestTitle]}>Active Requests</Text>
                         {displayByArray}
+
                         <Text style={[styles.titles, styles.leaderTitle]}>Friend Leaderboard</Text>
-                        <Image style={styles.leaderImage} source={require('../assets/leaderboard.png')} />
+                        <Image
+                            source={userValue == "4161112222" ? require("../assets/leaderboard_dani.png") : require("../assets/leaderboard_raj.png")}
+                            style={styles.leaderImage}>
+                        </Image>
+                        <Pressable onPress={() => navigation.navigate('Home')}>
+                            <Text style={styles.logout}>Log out</Text>
+                        </Pressable>
 
                     </View>
                 </ScrollView>
@@ -145,7 +165,7 @@ function Dashboard({ route, navigation }) {
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('Work', {userValue})}
+                        onPress={() => navigation.navigate('Work', { userValue })}
                         style={styles.workButton}>
                         <Image
                             source={require("../assets/workButton.png")}
@@ -175,6 +195,15 @@ function Dashboard({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+    logout: {
+        textAlign: 'right',
+        fontSize: 18,
+        fontWeight: 'bold',
+        textDecorationLine: 'underline',
+        color: colors.coffee,
+        marginRight: 40,
+        marginBottom: 20,
+    },
     requestIcon: {
         fontSize: 24,
         color: "white",
@@ -208,6 +237,7 @@ const styles = StyleSheet.create({
     requestPosted: {
         width: '25%',
         fontWeight: 'bold',
+        paddingLeft: 7,
     },
     requestCat: {
         width: '38%',
