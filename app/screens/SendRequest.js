@@ -62,7 +62,7 @@ function SendRequest({ route, navigation }) {
         setModalVisible(!modalVisible)
         var rand = Math.floor(1000 + Math.random() * (9999 - 1000));
         rand = rand.toString();
-        console.log(rand);
+        //console.log(rand);
         firestore()
             .collection('tasks')
             .doc(rand)
