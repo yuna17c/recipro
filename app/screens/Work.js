@@ -2,6 +2,7 @@ import 'react-native-gesture-handler';
 import React, { useRef, useState, useEffect } from "react";
 import { Animated, ImageBackground, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Platform, StatusBar, View, Button, LogBox } from 'react-native';
 import colors from '../config/colors';
+import { useIsFocused } from '@react-navigation/native';
 import { render } from 'react-dom';
 import { color } from 'react-native-reanimated';
 import Swiper from 'react-native-swiper';
@@ -48,7 +49,7 @@ function Work({ route, navigation }) {
     //const [otherUser, setOtherUser]=React.useState('')
     var otherUser = "";
     const [task1, setTask] = React.useState('')
-    const [imageArray, setImageArray] = React.useState([]);
+    const [docId, setDocId] = React.useState('');
 
     //const reference = storage().ref('garden1.png').getDownloadURL();
 
@@ -57,8 +58,10 @@ function Work({ route, navigation }) {
     }
     else otherUser = "4161112222";
 
-    // findOtherUser();
-    // console.log(otherUser);
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+    }, [isFocused]);
 
     let user = firestore()
         .collection('users')
@@ -78,6 +81,7 @@ function Work({ route, navigation }) {
                     const taskArray = [];
                     docSnapshot.forEach((doc) => {
                         taskArray.push(doc.data());
+                        console.log(doc.id);
                     })
                     setTaskDisplay(taskArray);
                 })
@@ -93,14 +97,23 @@ function Work({ route, navigation }) {
 
 
     const displayGardenArray = taskDisplay.map((item, index) =>
-        <TouchableOpacity key={index} onPress={() => navigation.navigate('Gardening')}>
-            <Image source={item.image == "../assets/garden1.png" ? require("../assets/garden1.png") : item.image == "../assets/garden2.png" ? require("../assets/garden2.png") : require("../assets/task_place.png")}
-                style={{ alignSelf: 'center', borderRadius: 13, marginHorizontal: 10, }}>
-            </Image>
-        </TouchableOpacity>
+        <View key = {index} style={styles.rowContainer}>
+            <View style={styles.colContainer}>
+                <Text style = {styles.taskTitle}>{item.title}</Text>
+                <Text style = {styles.taskDes}>{item.description}</Text>
+                <View style={styles.rowContainer}>
+                    <Text style = {styles.taskUrg}>{item.urgency}</Text>
+                    <Image source={require('../assets/coin.png')} style = {{width: '7%', resizeMode: 'contain', bottom:15, marginLeft:13}}></Image>
+                    <Text style = {styles.taskPoints}>{item.points}</Text>
+                </View>
+            </View>
+            <TouchableOpacity key={index} onPress={() => navigation.navigate('Gardening')}>
+                <Image source={item.image == "../assets/garden1.png" ? require("../assets/garden1.png") : item.image == "../assets/garden2.png" ? require("../assets/garden2.png") : require("../assets/task_place.png")}
+                    style={{alignSelf: 'center', borderRadius: 13,marginRight: 50, marginTop:10, }}>
+                </Image>
+            </TouchableOpacity>
+        </View>
     )
-    {/* <Image source={item.image=="../assets/garden1.png"? require("../assets/garden1.png"): item.image=="../assets/garden2.png"? require("../assets/garden2.png"): require("../assets/task_place.png") } */ }
-    {/* <Image source = {require("../assets/garden1.png")} */ }
 
 
     return (
@@ -196,16 +209,38 @@ function Work({ route, navigation }) {
                                 <Swiper style={styles.taskSubContainer} showsPagination={false} loop={false}>
                                     {/* <View style={{flex:1, flexDirection: 'row', alignContent: 'center'}}>
                                         </View> */}
-                                    <TouchableOpacity>
-                                        <Image source={require('../assets/garden1.png')}
-                                            style={{ alignSelf: 'center', borderRadius: 13, marginHorizontal: 10, }}>
-                                        </Image>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity>
-                                        <Image source={require('../assets/garden1.png')}
-                                            style={{ alignSelf: 'center', borderRadius: 13, marginRight: 26, marginLeft: 10 }}>
-                                        </Image>
-                                    </TouchableOpacity>
+                                    <View style={styles.rowContainer}>
+                                        <View style={styles.colContainer}>
+                                            <Text style = {styles.taskTitle}>Broken Faucet</Text>
+                                            <Text style = {styles.taskDes}>My kitchen faucet's been dripping non-stop, think it's an issue with plumbing</Text>
+                                            <View style={styles.rowContainer}>
+                                                <Text style = {styles.taskUrg}>next week</Text>
+                                                <Image source={require('../assets/coin.png')} style = {{width: '7%', resizeMode: 'contain', bottom:15, marginLeft:13}}></Image>
+                                                <Text style = {styles.taskPoints}>15</Text>
+                                            </View>
+                                        </View>
+                                        <TouchableOpacity>
+                                            <Image source={require("../assets/plumbing1.png") }
+                                                style={{alignSelf: 'center', borderRadius: 13,marginRight: 50, marginTop:10, }}>
+                                            </Image>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={styles.rowContainer}>
+                                        <View style={styles.colContainer}>
+                                            <Text style = {styles.taskTitle}>Frozen Pipe</Text>
+                                            <Text style = {styles.taskDes}>Water pipe clogged due to ice, would be nice if fixed</Text>
+                                            <View style={styles.rowContainer}>
+                                                <Text style = {styles.taskUrg}>today</Text>
+                                                <Image source={require('../assets/coin.png')} style = {{width: '7%', resizeMode: 'contain', bottom:15, marginLeft:13}}></Image>
+                                                <Text style = {styles.taskPoints}>40</Text>
+                                            </View>
+                                        </View>
+                                        <TouchableOpacity>
+                                            <Image source={require("../assets/plumbing2.png") }
+                                                style={{alignSelf: 'center', borderRadius: 13,marginRight: 50, marginTop:10, }}>
+                                            </Image>
+                                        </TouchableOpacity>
+                                    </View>
                                 </Swiper>
                             </ImageBackground>
                         </View>
@@ -214,18 +249,39 @@ function Work({ route, navigation }) {
                                 source={require('../assets/delivery.png')}
                                 style={styles.taskContainer}>
                                 <Swiper style={styles.taskSubContainer} showsPagination={false} loop={false}>
-                                    {/* <View style={{flex:1, flexDirection: 'row', alignContent: 'center'}}>
-                                        </View> */}
-                                    <TouchableOpacity>
-                                        <Image source={require('../assets/garden1.png')}
-                                            style={{ alignSelf: 'center', borderRadius: 13, marginHorizontal: 10, }}>
-                                        </Image>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity>
-                                        <Image source={require('../assets/garden1.png')}
-                                            style={{ alignSelf: 'center', borderRadius: 13, marginRight: 26, marginLeft: 10 }}>
-                                        </Image>
-                                    </TouchableOpacity>
+                                    <View style={styles.rowContainer}>
+                                        <View style={styles.colContainer}>
+                                            <Text style = {styles.taskTitle}>Drop-Off Lunch</Text>
+                                            <Text style = {styles.taskDes}>Could anyone help drop off our daughter's lunch? Our car is at the repair shop</Text>
+                                            <View style={styles.rowContainer}>
+                                                <Text style = {styles.taskUrg}>today</Text>
+                                                <Image source={require('../assets/coin.png')} style = {{width: '7%', resizeMode: 'contain', bottom:15, marginLeft:13}}></Image>
+                                                <Text style = {styles.taskPoints}>12</Text>
+                                            </View>
+                                        </View>
+                                        <TouchableOpacity>
+                                            <Image source={require("../assets/delivery1.png") }
+                                                style={{alignSelf: 'center', borderRadius: 13,marginRight: 50, marginTop:10, }}>
+                                            </Image>
+                                        </TouchableOpacity>
+                                    </View>
+
+                                    <View style={styles.rowContainer}>
+                                        <View style={styles.colContainer}>
+                                            <Text style = {styles.taskTitle}>Grocery pick up</Text>
+                                            <Text style = {styles.taskDes}>Groceries really need to picked up but my leg is broken and currenty cannot drive!</Text>
+                                            <View style={styles.rowContainer}>
+                                                <Text style = {styles.taskUrg}>next week</Text>
+                                                <Image source={require('../assets/coin.png')} style = {{width: '7%', resizeMode: 'contain', bottom:15, marginLeft:13}}></Image>
+                                                <Text style = {styles.taskPoints}>10</Text>
+                                            </View>
+                                        </View>
+                                        <TouchableOpacity>
+                                            <Image source={require("../assets/delivery2.png") }
+                                                style={{alignSelf: 'center', borderRadius: 13,marginRight: 50, marginTop:10, }}>
+                                            </Image>
+                                        </TouchableOpacity>
+                                    </View>
                                 </Swiper>
                             </ImageBackground>
                         </View>
@@ -309,6 +365,48 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginTop: 30,
     },
+    rowContainer: {
+        flex:1, 
+        flexDirection: 'row', 
+        alignContent: 'center'
+    },
+    colContainer: {
+        flex:1, 
+        flexDirection: 'column', 
+        alignContent: 'center'
+    },
+    taskTitle: {
+        color: colors.coffee, 
+        fontSize: 15, 
+        fontWeight: 'bold', 
+        marginLeft: 50, 
+        marginTop: 25, 
+        marginBottom: 10, 
+        marginRight: 10,
+    },
+    taskDes: {
+        color: colors.coffee, 
+        fontSize: 11, 
+        marginLeft: 50, 
+        marginTop: 15, 
+        marginRight: 10, 
+        bottom: 20,
+    },
+    taskUrg: {
+        color: colors.primary, 
+        fontSize: 11, 
+        marginLeft: 50, 
+        marginRight: 10, 
+        bottom: 10,
+    },
+    taskPoints: {
+        color: colors.primary,
+        fontSize: 11, 
+        bottom: 10,
+
+    }
+
+    
 });
 
 export default Work;

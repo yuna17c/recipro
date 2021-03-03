@@ -134,7 +134,7 @@ function Dashboard({ route, navigation }) {
                         <Text style={styles.bestScore}>{pb}</Text>
 
                         <Image
-                            source={userValue == "4161112222" ? require("../assets/badges.png") : require("../assets/badges_raj.png")}
+                            source={userValue == "4161112222" ? require("../assets/Badges.png") : require("../assets/badges_raj.png")}
                             style={styles.badges}>
                         </Image>
 
