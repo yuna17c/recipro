@@ -53,11 +53,11 @@ function SendRequest({ route, navigation }) {
     if (taskDuration.value == 1 || taskDuration.value == 2) {
         points += 10
     } else if (taskDuration.value == 3 || taskDuration.value == 4) {
-        points += 15
+        points += 22
     } else if (taskDuration.value == 5 || taskDuration.value == 6) {
-        points += 20
+        points += 30
     }
-    points += (task_category * 2)
+    points += (task_category * 3)
     const confirmSend = e => {
         setModalVisible(!modalVisible)
         var rand = Math.floor(1000 + Math.random() * (9999 - 1000));

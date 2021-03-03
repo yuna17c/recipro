@@ -6,8 +6,9 @@ import { render } from 'react-dom';
 import { color } from 'react-native-reanimated';
 import "firebase/firestore";
 import { firestore } from 'firebase';
+import { Ionicons } from '@expo/vector-icons';
 
-function Gardening({ navigation }) {
+function Gardening({ route, navigation }) {
     const [title, setTitle] = React.useState('')
     const [points, setPoints] = React.useState('')
     const [desc, setDesc] = React.useState('')
@@ -15,6 +16,10 @@ function Gardening({ navigation }) {
     const [duration, setDuration] = React.useState('')
     const [urgency, seturgency] = React.useState('')
     const [user, setUser] = React.useState('')
+
+    const [name, setName] = React.useState('')
+    const [job, setJob] = React.useState('')
+    console.log(user)
     let task = firestore()
         .collection('tasks')
         .doc("1032")
@@ -28,6 +33,16 @@ function Gardening({ navigation }) {
                 setDuration(docSnapshot.get("duration"));
                 seturgency(docSnapshot.get("urgency"));
                 setUser(docSnapshot.get("user"));
+            }
+        });
+    let users = firestore()
+        .collection('users')
+        .doc("4161112222")
+    users.get()
+        .then((docSnapshot) => {
+            if (docSnapshot.exists) {
+                setName(docSnapshot.get("name"));
+                setJob(docSnapshot.get("occupation"));
             }
         });
     return (
@@ -49,23 +64,41 @@ function Gardening({ navigation }) {
                         </View>
                         <View style={styles.mainContainer}>
                             <View style={styles.header}>
-                                <Text style={styles.headerTitle}>{title}</Text>
+                                <View style={styles.subHeader}>
+                                    <Text style={styles.headerTitle}>{title}</Text>
+                                    <Text style={styles.headerLoc}>{location}</Text>
+                                </View>
+
                                 <Image style={styles.headerImg} source={require('../assets/coin.png')} />
                                 <Text style={styles.headerCoin}>{points}</Text>
                             </View>
+                            <View style={styles.request}>
+                                <Ionicons name="ios-person-circle-outline" style={styles.requestIcon} />
+                                <View>
+                                    <Text style={styles.requested1}>{name}</Text>
+                                    <Text style={styles.requested2}>{job}</Text>
+                                </View>
+                            </View>
 
-                            <Text>Requested by: {user}</Text>
                             <Text style={styles.desc}>{desc}</Text>
 
-                            <View style={styles.barContainer}>
-                                <Text style={styles.barItem1}>Duration</Text>
-                                <Text style={styles.barItem2}>{duration} hours</Text>
+
+                            <View style={styles.detailContainer}>
+                                <Image source={require('../assets/dottedLine.png')} />
+                                <View style={styles.subContainer}>
+                                    <Text style={styles.subItem1}>Duration</Text>
+                                    <Text style={styles.subItem2}>{duration} hours</Text>
+                                </View>
+                                <Image source={require('../assets/dottedLine.png')} />
+                                <View style={styles.subContainer}>
+                                    <Text style={styles.subItem1}>Urgency</Text>
+                                    <Text style={styles.subItem2}>{urgency} </Text>
+                                </View>
+
+
+                                <Image source={require('../assets/dottedLine.png')} />
                             </View>
 
-                            <View style={styles.barContainer}>
-                                <Text style={styles.barItem1}>Urgency</Text>
-                                <Text style={styles.barItem2}>{urgency}</Text>
-                            </View>
                         </View>
                         <TouchableOpacity style={styles.bottomBar}
                             onPress={() => navigation.navigate('Message')}>
@@ -85,17 +118,68 @@ function Gardening({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    desc: {
+    requestIcon: {
+        color: colors.coffee,
+        width: '14%',
+        height: '100%',
+        fontSize: 37,
+    },
+    request: {
+        marginVertical: 10,
+        flexDirection: 'row',
         width: '83%',
+    },
+    requested1: {
+        color: colors.coffee,
+        fontSize: 15,
+        fontWeight: 'bold',
+        alignSelf: 'flex-start',
+    },
+    requested2: {
+        color: colors.coffee,
+        fontSize: 14,
+        alignSelf: 'flex-start',
+    },
+    headerLoc: {
+        fontSize: 15,
+        color: colors.primary,
+        fontWeight: 'bold',
+        paddingLeft: 2.5,
+        textAlign: 'left',
+    },
+    subItem1: {
+        width: '50%',
+        color: colors.coffee,
+        fontWeight: 'bold',
+        fontSize: 15,
+    },
+    subItem2: {
+        width: '50%',
+        textAlign: 'right',
+        fontSize: 15,
+        color: colors.coffee,
+    },
+    detailContainer: {
+        width: '83%',
+        paddingBottom: 50,
+        paddingTop: 20,
+    },
+    subContainer: {
+        flexDirection: 'row',
+        width: '88%',
+        margin: 6,
+    },
+    desc: {
+        width: '80%',
         fontSize: 16,
         color: colors.coffee,
-        marginBottom: 18,
+        marginVertical: 10,
     },
     barContainer: {
         flexDirection: 'row',
         borderRadius: 11,
         backgroundColor: colors.secondary,
-        padding: 4,
+        padding: 6,
         width: '83%',
         justifyContent: 'center',
         margin: 8,
@@ -105,7 +189,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         width: '50%',
         fontSize: 18,
-        paddingLeft: 17,
+        paddingLeft: 14,
     },
     barItem2: {
         color: colors.cream,
@@ -116,26 +200,29 @@ const styles = StyleSheet.create({
     },
     header: {
         flexDirection: 'row',
-        width: '83%',
+        width: '82%',
         paddingVertical: 6,
         alignSelf: 'center',
-        justifyContent: 'center',
+    },
+    subHeader: {
+        width: '70%',
+
     },
     headerTitle: {
-        width: '78%',
         color: colors.coffee,
         fontWeight: 'bold',
         fontSize: 24,
     },
     headerCoin: {
-        width: '13%',
+        width: '19%',
         color: colors.primary,
         fontWeight: 'bold',
-        fontSize: 26,
-        marginLeft: 7
+        fontSize: 27,
+        marginLeft: 7,
+        marginTop: 5,
     },
     headerImg: {
-        width: '9%',
+        width: '11%',
         resizeMode: 'contain',
         height: '100%',
     },
