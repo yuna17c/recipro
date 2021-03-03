@@ -27,7 +27,7 @@ function App() {
         <Stack.Screen name="Dashboard" component={Dashboard} />
         <Stack.Screen name="SendRequest" component={SendRequest} />
         <Stack.Screen name="Work" component={Work} />
-        <Stack.Screen name="Message" component={practice} />
+        <Stack.Screen name="Message" component={Message} />
         <Stack.Screen name="Gardening" component={Gardening} />
       </Stack.Navigator>
     </NavigationContainer>
