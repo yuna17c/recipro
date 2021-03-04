@@ -92,13 +92,14 @@ function Work({ route, navigation }) {
     }, [task1])
 
 
+
     //const arr = [...taskDisplay].map((_, i) => i);
     //console.log(taskDisplay.length);
 
     var itemArray = []
     const displayGardenArray = taskDisplay.map((item, index) => {
         itemArray.push(item.taskId)
-        //console.log(itemArray)
+        console.log(itemArray)
         return (
             <View key={index} style={styles.rowContainer}>
                 <View style={styles.colContainer}>
@@ -110,7 +111,7 @@ function Work({ route, navigation }) {
                         <Text style={styles.taskPoints}>{item.points}</Text>
                     </View>
                 </View>
-                <TouchableOpacity onPress={() => navigation.navigate('Gardening', { itemArray, index })}>
+                <TouchableOpacity onPress={() => navigation.navigate('Gardening', { itemArray, index, otherUser, userValue })}>
                     <Image source={item.image == "../assets/garden1.png" ? require("../assets/garden1.png") : item.image == "../assets/garden2.png" ? require("../assets/garden2.png") : require("../assets/task_place.png")}
                         style={{ alignSelf: 'center', borderRadius: 13, marginRight: 50, marginTop: 10, }}>
                     </Image>
