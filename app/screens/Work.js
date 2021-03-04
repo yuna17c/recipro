@@ -80,8 +80,8 @@ function Work({ route, navigation }) {
                 .then((docSnapshot) => {
                     const taskArray = [];
                     docSnapshot.forEach((doc) => {
+                        //console.log(doc.data());
                         taskArray.push(doc.data());
-                        console.log(doc.id);
                     })
                     setTaskDisplay(taskArray);
                 })
@@ -95,24 +95,29 @@ function Work({ route, navigation }) {
     //const arr = [...taskDisplay].map((_, i) => i);
     //console.log(taskDisplay.length);
 
-
-    const displayGardenArray = taskDisplay.map((item, index) =>
-        <View key={index} style={styles.rowContainer}>
-            <View style={styles.colContainer}>
-                <Text style={styles.taskTitle}>{item.title}</Text>
-                <Text style={styles.taskDes}>{item.description}</Text>
-                <View style={styles.rowContainer}>
-                    <Text style={styles.taskUrg}>{item.urgency}</Text>
-                    <Image source={require('../assets/coin.png')} style={{ width: '7%', resizeMode: 'contain', bottom: 15, marginLeft: 13 }}></Image>
-                    <Text style={styles.taskPoints}>{item.points}</Text>
+    var itemArray = []
+    const displayGardenArray = taskDisplay.map((item, index) => {
+        itemArray.push(item.taskId)
+        //console.log(itemArray)
+        return (
+            <View key={index} style={styles.rowContainer}>
+                <View style={styles.colContainer}>
+                    <Text style={styles.taskTitle}>{item.title}</Text>
+                    <Text style={styles.taskDes}>{item.description}</Text>
+                    <View style={styles.rowContainer}>
+                        <Text style={styles.taskUrg}>{item.urgency}</Text>
+                        <Image source={require('../assets/coin.png')} style={{ width: '7%', resizeMode: 'contain', bottom: 15, marginLeft: 13 }}></Image>
+                        <Text style={styles.taskPoints}>{item.points}</Text>
+                    </View>
                 </View>
+                <TouchableOpacity onPress={() => navigation.navigate('Gardening', { itemArray, index })}>
+                    <Image source={item.image == "../assets/garden1.png" ? require("../assets/garden1.png") : item.image == "../assets/garden2.png" ? require("../assets/garden2.png") : require("../assets/task_place.png")}
+                        style={{ alignSelf: 'center', borderRadius: 13, marginRight: 50, marginTop: 10, }}>
+                    </Image>
+                </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={() => navigation.navigate('Gardening')}>
-                <Image source={item.image == "../assets/garden1.png" ? require("../assets/garden1.png") : item.image == "../assets/garden2.png" ? require("../assets/garden2.png") : require("../assets/task_place.png")}
-                    style={{ alignSelf: 'center', borderRadius: 13, marginRight: 50, marginTop: 10, }}>
-                </Image>
-            </TouchableOpacity>
-        </View>
+        )
+    }
     )
 
 
