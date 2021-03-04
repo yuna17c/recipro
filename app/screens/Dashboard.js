@@ -22,6 +22,7 @@ function Dashboard({ route, navigation }) {
     const [pb, setPb] = React.useState('')
     const [points, setPoints] = React.useState('')
     const [task1, setTask] = React.useState('')
+    const [taskStat, setTaskStat]=React.useState('')
     const [idx, setIdx] = React.useState(0)
     const [taskDisplay, setTaskDisplay] = React.useState([]);
     const [taskPoints, setTaskPoints]= React.useState(0)
@@ -72,11 +73,12 @@ function Dashboard({ route, navigation }) {
         });
     useEffect(() => {
         const subscriber =
-            firestore().collection('tasks').where("user", "==", userValue)
+            firestore().collection('tasks').where("user", "==", userValue).where("status","in",["Pending", "Accepted"])
                 .get()
                 .then((docSnapshot) => {
                     const taskData = []
                     docSnapshot.forEach((doc) => {
+                        // setTaskStat(doc.get("status"))
                         taskData.push(doc.data())
                     });
                     //console.log("yes")
@@ -87,9 +89,9 @@ function Dashboard({ route, navigation }) {
                     console.log("Error getting documents: ", error);
                 });
         return () => subscriber;
-    }, [task1])
+    }, [task1, points])
 
-
+  
 
     var itemArray = []
     const displayByArray = taskDisplay.map((item, index) => {
@@ -155,9 +157,6 @@ function Dashboard({ route, navigation }) {
         .then(()=> {
             console.log("points added")
         })
-
-
-
 
     }
 
