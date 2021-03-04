@@ -140,8 +140,11 @@ function Dashboard({ route, navigation }) {
             console.log("yes")
         })
 
-        console.log(otherPoints)
-        console.log(taskPoints)
+        // console.log(otherPoints)
+        // console.log(taskPoints)
+        // var total = otherPoints+taskPoints;
+        // console.log(total)
+
 
         firestore()
         .collection('users')
