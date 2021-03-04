@@ -76,6 +76,7 @@ function SendRequest({ route, navigation }) {
                 category: taskCategory,
                 points: points,
                 time: firestore.Timestamp.now(),
+                taskId: rand.toString(),
             })
         firestore()
             .collection('users')

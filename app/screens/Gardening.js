@@ -16,13 +16,16 @@ function Gardening({ route, navigation }) {
     const [duration, setDuration] = React.useState('')
     const [urgency, seturgency] = React.useState('')
     const [user, setUser] = React.useState('')
-
+    const { itemArray } = route.params;
+    const { index } = route.params;
     const [name, setName] = React.useState('')
     const [job, setJob] = React.useState('')
-    console.log(user)
+    console.log(itemArray)
+    console.log(index)
+    console.log(itemArray[index])
     let task = firestore()
         .collection('tasks')
-        .doc("1032")
+        .doc(itemArray[index])
     task.get()
         .then((docSnapshot) => {
             if (docSnapshot.exists) {
