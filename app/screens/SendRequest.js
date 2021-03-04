@@ -15,6 +15,8 @@ function SendRequest({ route, navigation }) {
     const [taskUrgency, onSelectUrgency] = React.useState('')
     const [taskCategory, onSelectCategory] = React.useState('')
     const [modalVisible, setModalVisible] = useState(false);
+    const [userPoints, setUserPoints] = useState(0);
+
     var points = 0;
     const fadeAnim1 = useRef(new Animated.Value(0)).current;
     const fadeAnim2 = useRef(new Animated.Value(0)).current;
@@ -51,13 +53,27 @@ function SendRequest({ route, navigation }) {
     };
 
     if (taskDuration.value == 1 || taskDuration.value == 2) {
-        points += 10
+        points += 15
     } else if (taskDuration.value == 3 || taskDuration.value == 4) {
-        points += 22
+        points += 25
     } else if (taskDuration.value == 5 || taskDuration.value == 6) {
-        points += 30
+        points += 35
     }
-    points += (task_category * 3)
+    points += (task_category * 3);
+
+    firestore()
+    .collection('users')
+    .doc(userValue)
+    .get()
+    .then((docSnapshot) => {
+        if (docSnapshot.exists) {
+            setUserPoints(docSnapshot.get("points"));
+        }
+    })
+
+    //console.log(points)
+    //console.log(userPoints+1)
+    
     const confirmSend = e => {
         setModalVisible(!modalVisible)
         var rand = Math.floor(1000 + Math.random() * (9999 - 1000));
@@ -74,6 +90,7 @@ function SendRequest({ route, navigation }) {
                 duration: taskDuration.value,
                 urgency: taskUrgency.value,
                 category: taskCategory,
+                status: "Pending",
                 points: points,
                 time: firestore.Timestamp.now(),
                 taskId: rand.toString(),
@@ -83,6 +100,7 @@ function SendRequest({ route, navigation }) {
             .doc(userValue)
             .update({
                 task1: rand.toString(),
+                points: userPoints-points,
             })
             .then(() => {
                 console.log("task added");

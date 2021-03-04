@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { Animated, ImageBackground, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Platform, StatusBar, View, Button, LogBox } from 'react-native';
 import colors from '../config/colors';
 import { render } from 'react-dom';
@@ -16,31 +16,34 @@ function Gardening({ route, navigation }) {
     const [duration, setDuration] = React.useState('')
     const [urgency, seturgency] = React.useState('')
     const [user, setUser] = React.useState('')
-    const { itemArray } = route.params;
-    const { index } = route.params;
+    const { itemArray, index, otherUser, userValue } = route.params;
     const [name, setName] = React.useState('')
     const [job, setJob] = React.useState('')
     console.log(itemArray)
     console.log(index)
     console.log(itemArray[index])
+    
     let task = firestore()
         .collection('tasks')
         .doc(itemArray[index])
-    task.get()
-        .then((docSnapshot) => {
-            if (docSnapshot.exists) {
-                setTitle(docSnapshot.get("title"));
-                setPoints(docSnapshot.get("points"));
-                setDesc(docSnapshot.get("description"));
-                setLocation(docSnapshot.get("location"));
-                setDuration(docSnapshot.get("duration"));
-                seturgency(docSnapshot.get("urgency"));
-                setUser(docSnapshot.get("user"));
-            }
-        });
+        .get()
+    task.then((docSnapshot) => {
+        if (docSnapshot.exists) {
+            setTitle(docSnapshot.get("title"));
+            setPoints(docSnapshot.get("points"));
+            setDesc(docSnapshot.get("description"));
+            setLocation(docSnapshot.get("location"));
+            setDuration(docSnapshot.get("duration"));
+            seturgency(docSnapshot.get("urgency"));
+            setUser(docSnapshot.get("user"));
+        }
+    })
+
+    // console.log(otherUser);
+
     let users = firestore()
         .collection('users')
-        .doc("4161112222")
+        .doc(otherUser)
     users.get()
         .then((docSnapshot) => {
             if (docSnapshot.exists) {
@@ -48,6 +51,20 @@ function Gardening({ route, navigation }) {
                 setJob(docSnapshot.get("occupation"));
             }
         });
+
+
+    const goToMessage = e => {
+        firestore()
+        .collection('tasks')
+        .doc(itemArray[index])
+        .update({
+            status: "Accepted"
+        })
+        .then(() => {
+            console.log("acceptance");
+            navigation.navigate('Message', {userValue})
+        })
+    }
     return (
         <View style={styles.parentContainer}>
             <View style={styles.container}>
@@ -104,7 +121,7 @@ function Gardening({ route, navigation }) {
 
                         </View>
                         <TouchableOpacity style={styles.bottomBar}
-                            onPress={() => navigation.navigate('Message')}>
+                            onPress={(e) => goToMessage(e)}>
                             <Image
                                 source={require('../assets/sendmsg_bar.png')}
                             >
@@ -117,8 +134,8 @@ function Gardening({ route, navigation }) {
         </View>
 
     )
-        ;
-}
+    }
+
 
 const styles = StyleSheet.create({
     requestIcon: {

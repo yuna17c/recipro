@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect } from 'react';
-import { ImageBackground, TouchableOpacity, Text, contentContainerStyle, ScrollView, Image, StyleSheet, Platform, StatusBar, View, Button, LogBox, Pressable } from 'react-native';
+import {Modal, ImageBackground, TouchableOpacity, Text, contentContainerStyle, ScrollView, Image, StyleSheet, Platform, StatusBar, View, Button, LogBox, Pressable } from 'react-native';
 import colors from '../config/colors';
 import { useIsFocused } from '@react-navigation/native';
 import { back } from 'react-native/Libraries/Animated/src/Easing';
@@ -22,12 +22,19 @@ function Dashboard({ route, navigation }) {
     const [pb, setPb] = React.useState('')
     const [points, setPoints] = React.useState('')
     const [task1, setTask] = React.useState('')
-    const [taskCategory, setCat] = React.useState('')
+    const [idx, setIdx] = React.useState(0)
     const [taskDisplay, setTaskDisplay] = React.useState([]);
-    const [displayUser, setDisplayUser] = React.useState()
+    const [taskPoints, setTaskPoints]= React.useState(0)
+    const [otherPoints, setOtherPoints] = React.useState(0)
+    const [modalVisible, setModalVisible] = React.useState(false)
     const { userValue } = route.params;
 
-    //setDisplayUser(require("../assets/"+userValue.toString()+".png"));
+    var otherUser = "";
+
+    if (userValue == "4161112222") {
+        otherUser = "9053334444";
+    }
+    else otherUser = "4161112222";
 
     const isFocused = useIsFocused();
 
@@ -53,6 +60,16 @@ function Dashboard({ route, navigation }) {
                 setTask(docSnapshot.get("task1"));
             }
         });
+
+    let user2 = firestore()
+        .collection('users')
+        .doc(otherUser)
+    user2.get()
+        .then((docSnapshot) => {
+            if (docSnapshot.exists) {
+                setOtherPoints(docSnapshot.get("points"))
+            }
+        });
     useEffect(() => {
         const subscriber =
             firestore().collection('tasks').where("user", "==", userValue)
@@ -71,18 +88,107 @@ function Dashboard({ route, navigation }) {
                 });
         return () => subscriber;
     }, [task1])
-    const displayByArray = taskDisplay.map((item, index) =>
+
+
+
+    var itemArray = []
+    const displayByArray = taskDisplay.map((item, index) => {
+        itemArray.push(item.taskId)
+
+        return(
         <View key={index} style={styles.request}>
-            <Text style={[styles.requestText, styles.requestPosted]}>Pending</Text>
+            <TouchableOpacity onPress= {() => updateStatus(index)}>
+            <Text style={[styles.requestText, styles.requestPosted]}>{item.status}</Text>
+            </TouchableOpacity>
             <Text style={[styles.requestText, styles.requestCat]}>{item.category}</Text>
             <Image style={styles.requestImage} source={require('../assets/whiteCoin.png')} />
             <Text style={styles.requestPoint}>{item.points}</Text>
             <FontAwesome5 name="check-circle" style={styles.requestIcon} />
         </View>
+        )
+    }
     )
+
+    const updateStatus= (idx) => {
+        //console.log(itemArray[idx])
+
+        setIdx(idx)
+        setModalVisible(true)
+
+        firestore()
+        .collection('tasks')
+        .doc(itemArray[idx])
+        .get()
+        .then((docSnapshot)=> {
+            if (docSnapshot.exists) {
+                setTaskPoints(docSnapshot.get("points"))
+            }
+        })
+
+    }
+
+    const confirmUpdate = e => {
+        setModalVisible(!modalVisible)
+
+        firestore()
+        .collection('tasks')
+        .doc(itemArray[idx])
+        .update({
+            status: "Complete",
+        })
+        .then(()=> {
+            console.log("yes")
+        })
+
+        console.log(otherPoints)
+        console.log(taskPoints)
+
+        firestore()
+        .collection('users')
+        .doc(otherUser)
+        .update({
+            points: otherPoints+taskPoints,
+        })
+        .then(()=> {
+            console.log("points added")
+        })
+
+
+
+
+    }
 
     return (
         <View style={styles.parentContainer}>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <ImageBackground style={styles.modalView} source={require('../assets/pop-up.png')}>
+                        <Text style={styles.plus}>+{taskPoints} Recipoints</Text>
+                        <Text style={styles.explain}>This request will reward the volunteer {taskPoints} points.{"\n"}Task Complete?</Text>
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={[styles.button, styles.buttonConfirm]}
+                                onPress={(e) => confirmUpdate(e)}
+                            >
+                                <Text style={styles.textStyle}>Confirm</Text>
+                            </Pressable>
+                            <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={() => setModalVisible(!modalVisible)}
+                            >
+                                <Text style={styles.textStyle}>Cancel</Text>
+                            </Pressable>
+                        </View>
+                    </ImageBackground>
+                </View>
+            </Modal>
             <View style={styles.container}>
                 <ScrollView >
                     <Image
@@ -195,6 +301,62 @@ function Dashboard({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+    button: {
+        borderRadius: 10,
+        paddingHorizontal: 8,
+        paddingVertical: 6,
+        backgroundColor: colors.secondary,
+    },
+    textStyle: {
+        color: "white",
+        textAlign: "center",
+        fontSize: 15,
+    },
+    buttonContainer: {
+        paddingTop: 20,
+        paddingLeft: 70,
+        paddingRight: 70,
+        flexDirection: 'row',
+    },
+    buttonConfirm: {
+        marginRight: 10,
+    },
+    buttonClose: {
+        marginLeft: 10,
+    },
+    plus: {
+        fontSize: 24,
+        color: colors.coffee,
+        fontWeight: "bold",
+        paddingTop: 59,
+    },
+    explain: {
+        paddingTop: 6,
+        fontSize: 15,
+        color: colors.coffee,
+        textAlign: 'center',
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        width: '100%',
+    },
+    modalView: {
+        backgroundColor: "white",
+        borderRadius: 20,
+        marginBottom: 80,
+        padding: 20,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
     logout: {
         textAlign: 'right',
         fontSize: 18,
@@ -235,7 +397,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     requestPosted: {
-        width: '25%',
+        width: '100%',
         fontWeight: 'bold',
         paddingLeft: 7,
     },
