@@ -44,7 +44,6 @@ function SendRequest({ route, navigation }) {
     const fadein3 = () => {
         findCategory(task_category + 1)
         onSelectCategory("Delivery");
-        // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(fadeAnim3, {
             toValue: 2.3,
             duration: 90,
@@ -71,14 +70,10 @@ function SendRequest({ route, navigation }) {
         }
     })
 
-    //console.log(points)
-    //console.log(userPoints+1)
-    
     const confirmSend = e => {
         setModalVisible(!modalVisible)
         var rand = Math.floor(1000 + Math.random() * (9999 - 1000));
         rand = rand.toString();
-        //console.log(rand);
         firestore()
             .collection('tasks')
             .doc(rand)

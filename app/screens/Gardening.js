@@ -19,9 +19,6 @@ function Gardening({ route, navigation }) {
     const { itemArray, index, otherUser, userValue } = route.params;
     const [name, setName] = React.useState('')
     const [job, setJob] = React.useState('')
-    console.log(itemArray)
-    console.log(index)
-    console.log(itemArray[index])
     
     let task = firestore()
         .collection('tasks')
@@ -38,8 +35,6 @@ function Gardening({ route, navigation }) {
             setUser(docSnapshot.get("user"));
         }
     })
-
-    // console.log(otherUser);
 
     let users = firestore()
         .collection('users')
@@ -225,24 +220,24 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     subHeader: {
-        width: '70%',
+        width: '74%',
 
     },
     headerTitle: {
         color: colors.coffee,
         fontWeight: 'bold',
-        fontSize: 24,
+        fontSize: 20,
     },
     headerCoin: {
-        width: '19%',
+        width: '10%',
         color: colors.primary,
         fontWeight: 'bold',
-        fontSize: 27,
+        fontSize: 25,
         marginLeft: 7,
-        marginTop: 5,
+        marginTop: 6,
     },
     headerImg: {
-        width: '11%',
+        width: '10%',
         resizeMode: 'contain',
         height: '100%',
     },

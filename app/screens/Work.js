@@ -14,6 +14,7 @@ function Work({ route, navigation }) {
     const fadeAnim1 = useRef(new Animated.Value(0)).current;
     const fadeAnim2 = useRef(new Animated.Value(0)).current;
     const fadeAnim3 = useRef(new Animated.Value(0)).current;
+    const [gardeningCat, onGardeningCat] = React.useState()
 
     const fadein1 = () => {
         Animated.timing(fadeAnim1, {
@@ -39,14 +40,7 @@ function Work({ route, navigation }) {
         }).start();
     };
 
-    // const clicked = (id) => {
-    //     alert("clicked")
-    //     console.log(id)
-    // }
-
-
     const [taskDisplay, setTaskDisplay] = React.useState([]);
-    //const [otherUser, setOtherUser]=React.useState('')
     var otherUser = "";
     const [task1, setTask] = React.useState('')
     const [docId, setDocId] = React.useState('');
@@ -80,7 +74,6 @@ function Work({ route, navigation }) {
                 .then((docSnapshot) => {
                     const taskArray = [];
                     docSnapshot.forEach((doc) => {
-                        //console.log(doc.data());
                         taskArray.push(doc.data());
                     })
                     setTaskDisplay(taskArray);
@@ -91,15 +84,9 @@ function Work({ route, navigation }) {
         return () => subscriber;
     }, [task1])
 
-
-
-    //const arr = [...taskDisplay].map((_, i) => i);
-    //console.log(taskDisplay.length);
-
     var itemArray = []
     const displayGardenArray = taskDisplay.map((item, index) => {
         itemArray.push(item.taskId)
-        console.log(itemArray)
         return (
             <View key={index} style={styles.rowContainer}>
                 <View style={styles.colContainer}>
@@ -185,7 +172,7 @@ function Work({ route, navigation }) {
                                     { borderWidth: fadeAnim3 }
                                 ]}>
                                     <Image
-                                        source={require('../assets/gardening_cat.png')}
+                                        source={require('../assets/delivery_btn.png')}
                                         style={styles.cat_item}
                                     ></Image>
                                 </Animated.View>
@@ -357,7 +344,6 @@ const styles = StyleSheet.create({
         marginTop: 25,
         marginBottom: 19,
     },
-
     taskContainer: {
         flex: 1,
         alignSelf: 'center',
@@ -402,13 +388,14 @@ const styles = StyleSheet.create({
         color: colors.primary,
         fontSize: 11,
         marginLeft: 50,
-        marginRight: 10,
         bottom: 10,
+        marginRight: 5,
     },
     taskPoints: {
         color: colors.primary,
         fontSize: 11,
         bottom: 10,
+        paddingLeft: 3,
 
     }
 

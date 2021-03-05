@@ -10,6 +10,7 @@ import Login from './Login';
 import { color } from 'react-native-reanimated';
 import { FontAwesome, FontAwesome5, Entypo } from '@expo/vector-icons';
 import { firestore } from 'firebase';
+import { AntDesign } from '@expo/vector-icons'; 
 
 function Dashboard({ route, navigation }) {
     const [bio, setBio] = React.useState('')
@@ -91,29 +92,25 @@ function Dashboard({ route, navigation }) {
         return () => subscriber;
     }, [task1, points])
 
-    
-
     var itemArray = []
     const displayByArray = taskDisplay.map((item, index) => {
         itemArray.push(item.taskId)
 
         return(
         <View key={index} style={styles.request}>
+            <AntDesign name="checkcircleo" size={22} color="white" style={styles.requestIcon}/>
             <TouchableOpacity onPress= {() => updateStatus(index)}>
             <Text style={[styles.requestText, styles.requestPosted]}>{item.status}</Text>
             </TouchableOpacity>
             <Text style={[styles.requestText, styles.requestCat]}>{item.category}</Text>
             <Image style={styles.requestImage} source={require('../assets/whiteCoin.png')} />
             <Text style={styles.requestPoint}>{item.points}</Text>
-            <FontAwesome5 name="check-circle" style={styles.requestIcon} />
         </View>
         )
     }
     )
 
     const updateStatus= (idx) => {
-        //console.log(itemArray[idx])
-
         setIdx(idx)
         setModalVisible(true)
 
@@ -141,12 +138,6 @@ function Dashboard({ route, navigation }) {
         .then(()=> {
             console.log("yes")
         })
-
-        // console.log(otherPoints)
-        // console.log(taskPoints)
-        // var total = otherPoints+taskPoints;
-        // console.log(total)
-
 
         firestore()
         .collection('users')
@@ -242,7 +233,7 @@ function Dashboard({ route, navigation }) {
                         <Text style={styles.bestScore}>{pb}</Text>
 
                         <Image
-                            source={userValue == "4161112222" ? require("../assets/badges.png") : require("../assets/badges_raj.png")}
+                            source={userValue == "4161112222" ? require("../assets/Badges.png") : require("../assets/badges_raj.png")}
                             style={styles.badges}>
                         </Image>
 
@@ -303,6 +294,10 @@ function Dashboard({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+    requestIcon: {
+        paddingLeft: 10,
+
+    },
     button: {
         borderRadius: 10,
         paddingHorizontal: 8,
@@ -368,11 +363,6 @@ const styles = StyleSheet.create({
         marginRight: 40,
         marginBottom: 20,
     },
-    requestIcon: {
-        fontSize: 24,
-        color: "white",
-        width: '12%',
-    },
     leaderImage: {
         alignSelf: 'center',
         marginBottom: 20,
@@ -401,10 +391,14 @@ const styles = StyleSheet.create({
     requestPosted: {
         width: '100%',
         fontWeight: 'bold',
-        paddingLeft: 7,
+        paddingLeft: 10,
     },
     requestCat: {
-        width: '38%',
+        width: '45%',
+    },
+    requestUrg: {
+        fontStyle:'italic',
+        width: '25%',
     },
     requestImage: {
         width: '9%',
