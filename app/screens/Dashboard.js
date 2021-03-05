@@ -91,7 +91,7 @@ function Dashboard({ route, navigation }) {
         return () => subscriber;
     }, [task1, points])
 
-  
+    
 
     var itemArray = []
     const displayByArray = taskDisplay.map((item, index) => {

@@ -27,7 +27,7 @@ function Message ({route,navigation}) {
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('Work')}
+                        onPress={() => navigation.navigate('Work', {userValue})}
                         style={styles.workButton}>
                         <Image
                             source={require("../assets/workButton.png")}
