@@ -105,7 +105,7 @@ function Dashboard({ route, navigation }) {
             <Text style={[styles.requestText, styles.requestCat]}>{item.category}</Text>
             <Image style={styles.requestImage} source={require('../assets/whiteCoin.png')} />
             <Text style={styles.requestPoint}>{item.points}</Text>
-        </View>
+        </View> 
         )
     }
     )
@@ -116,19 +116,17 @@ function Dashboard({ route, navigation }) {
 
         firestore()
         .collection('tasks')
-        .doc(itemArray[idx])
+        .doc(itemArray[idx]) 
         .get()
         .then((docSnapshot)=> {
             if (docSnapshot.exists) {
                 setTaskPoints(docSnapshot.get("points"))
             }
         })
-
     }
 
     const confirmUpdate = e => {
         setModalVisible(!modalVisible)
-
         firestore()
         .collection('tasks')
         .doc(itemArray[idx])
@@ -320,11 +318,11 @@ const styles = StyleSheet.create({
     },
     buttonClose: {
         marginLeft: 10,
-    },
-    plus: {
+    },  
+    plus: { 
         fontSize: 24,
         color: colors.coffee,
-        fontWeight: "bold",
+        fontWeight: "bold", 
         paddingTop: 59,
     },
     explain: {

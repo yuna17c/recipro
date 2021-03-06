@@ -58,12 +58,12 @@ function SendRequest({ route, navigation }) {
     } else if (taskDuration.value == 5 || taskDuration.value == 6) {
         points += 35
     }
-    points += (task_category * 3);
+    points += (task_category * 3); 
 
     firestore()
-    .collection('users')
+    .collection('users')            
     .doc(userValue)
-    .get()
+    .get()  
     .then((docSnapshot) => {
         if (docSnapshot.exists) {
             setUserPoints(docSnapshot.get("points"));

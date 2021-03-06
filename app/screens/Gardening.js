@@ -47,10 +47,10 @@ function Gardening({ route, navigation }) {
             }
         });
 
-
-    const goToMessage = e => {
+    
+    const goToMessage = e => {     
         firestore()
-        .collection('tasks')
+        .collection('tasks') 
         .doc(itemArray[index])
         .update({
             status: "Accepted"
